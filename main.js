@@ -16,19 +16,26 @@ import tracks from './tracks/' with { type: 'json' };
 const map = new Map({
   target: 'map',
   layers: [
-    /*new TileLayer({
-      source: new OSM({
-        url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
-      })
-    }),*/
     new TileLayer({
       source: new XYZ({
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
       })
-    }),
+    })
+  ],
+  view: new View({
+    center: fromLonLat([7.6, 46.92]),
+    zoom: 8.5,
+  }),
+});
+
+tracks.forEach(track => {
+  if(track.name) {
+    track = track.name
+  }
+  map.addLayer(
     new VectorLayer({
       source: new VectorSource({
-        url: 'tracks/'+tracks[0].name,
+        url: 'tracks/'+track,
         format: new GPX(),
       }),
       style: new Style({
@@ -38,70 +45,4 @@ const map = new Map({
         })
       })
     })
-  ],
-  view: new View({
-
-    center: fromLonLat([7.12, 46.92]),
-    zoom: 11,
-  }),
-});
-
-map.on('postcompose', function (e) {
-  //document.querySelector('canvas').style.filter = "grayscale(30%) contrast(60%)";
-});
-
-var lineStyle =
-{
-  "2021": [
-    new Style({
-      stroke: new Stroke({
-        color: '#cc11cc60',
-        width: 3
-      })
-    })
-  ],
-  "2022": [
-    new Style({
-      stroke: new Stroke({
-        color: '#cc11cc60',
-        width: 3
-      })
-    })
-  ],
-  "2023": [
-    new Style({
-      stroke: new Stroke({
-        color: '#11ddcc60',
-        width: 3
-      })
-    }),
-  ],
-  "2024": [
-    new Style({
-      stroke: new Stroke({
-        color: '#cc771160',
-        width: 3
-      })
-    }),
-  ]
-};
-
-var data=[]
-data.forEach(trip => {
-  if (!trip.from.location.coordinates.y || !trip.to.location.coordinates.y) {
-    return
-  }
-  var line = new Vector({
-    source: new SourceVector({
-      features: [new Feature({
-        geometry: new LineString([
-          fromLonLat([trip.from.location.coordinates.y, trip.from.location.coordinates.x]),
-          fromLonLat([trip.to.location.coordinates.y, trip.to.location.coordinates.x])]),
-        name: 'Line',
-      })]
-    })
-  });
-
-  line.setStyle(lineStyle[trip.month.split("-")[0]]);
-  map.addLayer(line);
-});
+  )});
