@@ -32,17 +32,18 @@ tracks.forEach(track => {
   if(track.name) {
     track = track.name
   }
-  map.addLayer(
-    new VectorLayer({
-      source: new VectorSource({
-        url: 'tracks/'+track,
-        format: new GPX(),
-      }),
-      style: new Style({
-        stroke: new Stroke({
-          color: '#cc11cc',
-          width: 8
-        })
+  var layer = new VectorLayer({
+    source: new VectorSource({
+      url: 'tracks/'+track,
+      format: new GPX(),
+    }),
+    style: new Style({
+      stroke: new Stroke({
+        color: '#cc11ccc0',
+        width: 8
       })
     })
-  )});
+  })
+  layer.eve
+  map.addLayer(layer);
+});
