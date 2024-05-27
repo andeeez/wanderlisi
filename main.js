@@ -39,15 +39,32 @@ const startPinSource = new VectorSource ();
 const endPinSource = new VectorSource ();
 const processedLayers =  []
 
+const format = new GPX();
+const readFeatures_ = format.readFeatures;
+format.readFeatures = function(source, options) {
+  const meta = format.readMetadata(source);
+  const features = readFeatures_.apply(this, arguments);
+  if(meta && meta.name) {
+    features.forEach(feature => {
+      if(feature.getGeometry().getType() == "MultiLineString") {
+        feature.set("name", meta.name);
+      }
+    })
+  }
+  return features;
+}
+
 tracks.forEach(track => {
   if(track.name) {
     track = track.name
   }
-  var layer = new VectorLayer({
-    source: new VectorSource({
+
+  const source = new VectorSource({
       url: 'tracks/'+track,
-      format: new GPX(),
-    }),
+      format: format,
+  });
+  const layer = new VectorLayer({
+    source: source,
     style: new Style({
       stroke: new Stroke({
         color: '#bb11bbc0',
@@ -143,7 +160,11 @@ select.on('select', function (e) {
   if(e.selected.length > 0) {
     const layer = select.getLayer(e.selected[0]);
     layer.setZIndex(1);
+    const name = e.selected[0].get("name");
     selected = layer;
+    document.getElementById("detail").style.display = "block";
+    document.getElementById("trackName").innerText = name;
+  } else {
+    document.getElementById("detail").style.display = "none";
   }
-  console.log(e);
 });
