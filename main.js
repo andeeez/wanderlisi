@@ -2,14 +2,14 @@ import Map from 'https://cdn.skypack.dev/ol/Map.js';
 import View from 'https://cdn.skypack.dev/ol/View.js';
 import Feature from 'https://cdn.skypack.dev/ol/Feature.js';
 import LineString from 'https://cdn.skypack.dev/ol/geom/LineString.js';
+import Point from 'https://cdn.skypack.dev/ol/geom/Point.js';
 import TileLayer from 'https://cdn.skypack.dev/ol/layer/Tile.js';
 import VectorLayer from 'https://cdn.skypack.dev/ol/layer/Vector.js';
 import VectorSource from 'https://cdn.skypack.dev/ol/source/Vector.js';
 import OSM from 'https://cdn.skypack.dev/ol/source/OSM.js';
 import XYZ from 'https://cdn.skypack.dev/ol/source/XYZ.js';
 import { fromLonLat } from 'https://cdn.skypack.dev/ol/proj.js';
-import Style from 'https://cdn.skypack.dev/ol/style/Style.js';
-import Stroke from 'https://cdn.skypack.dev/ol/style/Stroke.js';
+import {Circle as CircleStyle, Fill, Stroke, Style} from 'https://cdn.skypack.dev/ol/style.js';
 import GPX from 'https://cdn.skypack.dev/ol/format/GPX.js';
 import tracks from './tracks/' with { type: 'json' };
 
@@ -28,6 +28,10 @@ const map = new Map({
   }),
 });
 
+const center = map.getView().getCenter();
+const pinSource = new VectorSource ();
+const processedLayers =  []
+
 tracks.forEach(track => {
   if(track.name) {
     track = track.name
@@ -44,6 +48,40 @@ tracks.forEach(track => {
       })
     })
   })
-  layer.eve
-  map.addLayer(layer);
+  layer.on("postrender",
+    event => {
+      const layer = event.target
+      if(processedLayers.indexOf(layer) == -1) {
+        const features = layer.getSource().getFeatures();
+        features.forEach(feature => {
+          const type = feature.getGeometry().getType();
+          if(processedLayers.indexOf(layer) == -1 && (type == "LineString" ||
+              type == "MultiLineString")) {
+            processedLayers.push(layer);
+            const first = feature.getGeometry().getFirstCoordinate();
+            const last = feature.getGeometry().getLastCoordinate();
+            pinSource.addFeature(new Feature(new Point(first)));
+            pinSource.addFeature(new Feature(new Point(last)));
+          }
+        });
+      }
+    });
+    map.addLayer(layer);
 });
+
+const pinLayer = new VectorLayer ({
+  source: pinSource,
+  style: new Style({
+    image: new CircleStyle({
+      fill: new Fill({
+        color: '#cc11ccc0',
+      }),
+      radius: 6,
+      stroke: new Stroke({
+        color: '#ffffff',
+        width: 2,
+      }),
+    })
+  })
+});
+map.addLayer (pinLayer);
