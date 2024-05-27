@@ -29,7 +29,8 @@ const map = new Map({
 });
 
 const center = map.getView().getCenter();
-const pinSource = new VectorSource ();
+const startPinSource = new VectorSource ();
+const endPinSource = new VectorSource ();
 const processedLayers =  []
 
 tracks.forEach(track => {
@@ -58,10 +59,10 @@ tracks.forEach(track => {
           if(processedLayers.indexOf(layer) == -1 && (type == "LineString" ||
               type == "MultiLineString")) {
             processedLayers.push(layer);
-            const first = feature.getGeometry().getFirstCoordinate();
-            const last = feature.getGeometry().getLastCoordinate();
-            pinSource.addFeature(new Feature(new Point(first)));
-            pinSource.addFeature(new Feature(new Point(last)));
+            const first = new Point(feature.getGeometry().getFirstCoordinate());
+            const last = new Point(feature.getGeometry().getLastCoordinate());
+            startPinSource.addFeature(new Feature(first));
+            endPinSource.addFeature(new Feature(last));
           }
         });
       }
@@ -69,19 +70,41 @@ tracks.forEach(track => {
     map.addLayer(layer);
 });
 
-const pinLayer = new VectorLayer ({
-  source: pinSource,
-  style: new Style({
+const startStyle = new Style({
     image: new CircleStyle({
       fill: new Fill({
-        color: '#cc11ccc0',
+        color: '#cc11cca0',
       }),
-      radius: 6,
+      radius: 5,
       stroke: new Stroke({
         color: '#ffffff',
         width: 2,
       }),
     })
-  })
+  });
+
+const endStyle = new Style({
+    image: new CircleStyle({
+      fill: new Fill({
+        color: '#ccccccc0',
+      }),
+      radius: 5,
+      stroke: new Stroke({
+        color: '#ffffff',
+        width: 2,
+      }),
+    })
+  });
+
+const startPinLayer = new VectorLayer ({
+  source: startPinSource,
+  style: startStyle
 });
-map.addLayer (pinLayer);
+
+const endPinLayer = new VectorLayer ({
+  source: endPinSource,
+  style: endStyle
+});
+
+map.addLayer (endPinLayer);
+map.addLayer (startPinLayer);
