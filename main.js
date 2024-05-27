@@ -73,11 +73,11 @@ tracks.forEach(track => {
 const startStyle = new Style({
     image: new CircleStyle({
       fill: new Fill({
-        color: '#cc11cca0',
+        color: '#ffffff',
       }),
       radius: 5,
       stroke: new Stroke({
-        color: '#ffffff',
+        color: '#cc11ccc0',
         width: 2,
       }),
     })
@@ -86,11 +86,11 @@ const startStyle = new Style({
 const endStyle = new Style({
     image: new CircleStyle({
       fill: new Fill({
-        color: '#ccccccc0',
+        color: '#ffffffa0',
       }),
       radius: 5,
       stroke: new Stroke({
-        color: '#ffffff',
+        color: '#cc11ccc0',
         width: 2,
       }),
     })
