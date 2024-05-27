@@ -145,6 +145,7 @@ const selectStyle = new Style({
 const select = new Select({
   condition: click,
   style: selectStyle,
+  hitTolerance: 10,
   filter: function(feature) {
     return feature.getGeometry().getType() == "MultiLineString";
   }
