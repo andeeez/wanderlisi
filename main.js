@@ -8,10 +8,16 @@ import VectorLayer from 'https://cdn.skypack.dev/ol/layer/Vector.js';
 import VectorSource from 'https://cdn.skypack.dev/ol/source/Vector.js';
 import OSM from 'https://cdn.skypack.dev/ol/source/OSM.js';
 import XYZ from 'https://cdn.skypack.dev/ol/source/XYZ.js';
-import { fromLonLat } from 'https://cdn.skypack.dev/ol/proj.js';
+import {fromLonLat} from 'https://cdn.skypack.dev/ol/proj.js';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'https://cdn.skypack.dev/ol/style.js';
+
+import Select from 'https://cdn.skypack.dev/ol/interaction/Select.js';
+import {click} from 'https://cdn.skypack.dev/ol/events/condition.js';
+
+
 import GPX from 'https://cdn.skypack.dev/ol/format/GPX.js';
 import tracks from './tracks/' with { type: 'json' };
+
 
 const map = new Map({
   target: 'map',
@@ -44,10 +50,11 @@ tracks.forEach(track => {
     }),
     style: new Style({
       stroke: new Stroke({
-        color: '#cc11ccc0',
+        color: '#bb11bbc0',
         width: 8
       })
-    })
+    }),
+    zIndex: 0
   })
   layer.on("postrender",
     event => {
@@ -98,13 +105,45 @@ const endStyle = new Style({
 
 const startPinLayer = new VectorLayer ({
   source: startPinSource,
-  style: startStyle
+  style: startStyle,
+  zIndex: 4
 });
 
 const endPinLayer = new VectorLayer ({
   source: endPinSource,
-  style: endStyle
+  style: endStyle,
+  zIndex: 2
 });
 
 map.addLayer (endPinLayer);
 map.addLayer (startPinLayer);
+
+const selectStyle = new Style({
+  stroke: new Stroke({
+    color: '#ff44ffd0',
+    width: 8
+  })
+})
+
+const select = new Select({
+  condition: click,
+  style: selectStyle,
+  filter: function(feature) {
+    return feature.getGeometry().getType() == "MultiLineString";
+  }
+});
+
+var selected = null;
+
+map.addInteraction(select);
+select.on('select', function (e) {
+  if(selected != null) {
+    selected.setZIndex(0);
+  }
+  if(e.selected.length > 0) {
+    const layer = select.getLayer(e.selected[0]);
+    layer.setZIndex(1);
+    selected = layer;
+  }
+  console.log(e);
+});
