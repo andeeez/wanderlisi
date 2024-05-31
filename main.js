@@ -172,7 +172,7 @@ const profile = new Chart(
       },
       animations: {
         radius: {
-          duration: 400,
+          duration: 200,
           easing: 'linear',
           loop: (context) => context.active
         }
@@ -247,6 +247,6 @@ select.on('select', function (e) {
       }));
     profile.update();
   } else {
-    document.getElementById("detail").style.display = "block";
+    document.getElementById("detail").style.display = "none";
   }
 });
