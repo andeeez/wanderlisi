@@ -245,6 +245,14 @@ select.on('select', function (e) {
             previous = Object.assign({}, current);
           }
       }));
+    const kmEffort = current.distance / 1000 + current.up / 100;
+    const totalMinutes = kmEffort * 60/4.5;
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.round(totalMinutes % 60);
+    document.getElementById("time").innerText = hours + ":" + String(minutes).padStart(2, '0');
+    document.getElementById("distance").innerText = Math.round(current.distance / 100.0) / 10;
+    document.getElementById("up").innerText = Math.round(current.up);
+    document.getElementById("down").innerText = Math.round(current.down);
     profile.update();
   } else {
     document.getElementById("detail").style.display = "none";

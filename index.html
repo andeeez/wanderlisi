@@ -5,15 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>wanderlisi</title>
     <link href="https://cdn.skypack.dev/ol/ol.css" rel="stylesheet">
-    <link href="./style.css?1" rel="stylesheet">
+    <link href="./style.css?2" rel="stylesheet">
   </head>
   <body>
     <div id="map"></div>
     <div id="detail">
       <div id="trackName">&nbsp;</div>
+      <div id="info">
+        <div class="info-line"><span id="time"></span></div>
+        <div class="info-line"><span id="distance"></span>&nbsp;km&#x202F;</div>
+        <div class="info-line"><span id="up"></span>&nbsp;m&#x202F;🡕</div>
+        <div class="info-line"><span id="down"></span>&nbsp;m&#x202F;🡖</div>
+      </div>
+
       <div id="profile-container"><canvas width="320" height="160" id="profile"></canvas></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="./main.js?1"></script>
+    <script type="module" src="./main.js?2"></script>
   </body>
 </html>

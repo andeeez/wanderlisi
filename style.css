@@ -36,3 +36,21 @@ body {
 
 #profile {
 }
+
+#info {
+  background-color: #ffffff80;
+  width: 70px;
+  padding: 4px;
+  position: fixed;
+  right: 0;
+  left: auto;
+}
+
+.info-line {
+  line-height: 18px;
+  height: 20px;
+}
+
+#time {
+  font-weight: bold;
+}
