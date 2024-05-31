@@ -13,7 +13,7 @@ body {
 }
 
 #detail {
-  display: none;
+  display: block;
   position: absolute;
   background-color: white;
   border-top: 1px solid black ;
@@ -24,7 +24,15 @@ body {
 }
 
 #trackName {
+  height: 20px;
   font-size: 120%;
   font-weight: bold;
   padding-left: 6px;
+}
+
+#profile-container {
+  height: 180px;
+}
+
+#profile {
 }

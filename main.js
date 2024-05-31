@@ -8,16 +8,17 @@ import VectorLayer from 'https://cdn.skypack.dev/ol/layer/Vector.js';
 import VectorSource from 'https://cdn.skypack.dev/ol/source/Vector.js';
 import OSM from 'https://cdn.skypack.dev/ol/source/OSM.js';
 import XYZ from 'https://cdn.skypack.dev/ol/source/XYZ.js';
-import {fromLonLat} from 'https://cdn.skypack.dev/ol/proj.js';
+import {fromLonLat, toLonLat} from 'https://cdn.skypack.dev/ol/proj.js';
+import {getDistance} from 'https://cdn.skypack.dev/ol/sphere.js';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'https://cdn.skypack.dev/ol/style.js';
 
 import Select from 'https://cdn.skypack.dev/ol/interaction/Select.js';
 import {click} from 'https://cdn.skypack.dev/ol/events/condition.js';
 
-
 import GPX from 'https://cdn.skypack.dev/ol/format/GPX.js';
 import tracks from './tracks/' with { type: 'json' };
 
+// Map Config
 
 const map = new Map({
   target: 'map',
@@ -29,6 +30,9 @@ const map = new Map({
     })
   ],
   view: new View({
+    minZoom: 7,
+    maxZoom: 17,
+    enableRotation: false,
     center: fromLonLat([7.6, 46.92]),
     zoom: 8.5,
   }),
@@ -38,6 +42,8 @@ const center = map.getView().getCenter();
 const startPinSource = new VectorSource ();
 const endPinSource = new VectorSource ();
 const processedLayers =  []
+
+// Load Tracks
 
 const format = new GPX();
 const readFeatures_ = format.readFeatures;
@@ -94,6 +100,8 @@ tracks.forEach(track => {
     map.addLayer(layer);
 });
 
+// Start/End Markers
+
 const startStyle = new Style({
     image: new CircleStyle({
       fill: new Fill({
@@ -135,9 +143,54 @@ const endPinLayer = new VectorLayer ({
 map.addLayer (endPinLayer);
 map.addLayer (startPinLayer);
 
+// Altitude Profile
+
+const dataset = {
+  showLine: true,
+  borderColor: '#cc11ccc0',
+  pointStyle: false,
+  data: [
+    { x: 0, y: 10 },
+    { x: 2.5, y: 20 },
+    { x: 7, y: 15 }
+  ]
+};
+
+const profile = new Chart(
+  document.getElementById('profile'),
+  {
+    type: 'scatter',
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          enabled: false
+        }
+      },
+      animations: {
+        radius: {
+          duration: 400,
+          easing: 'linear',
+          loop: (context) => context.active
+        }
+      },
+    },
+    data: {
+      datasets: [
+        dataset
+      ]
+    }
+  }
+);
+
+// Map Interaction
+
 const selectStyle = new Style({
   stroke: new Stroke({
-    color: '#ff44ffd0',
+    color: '#ff44ffe0',
     width: 8
   })
 })
@@ -165,7 +218,35 @@ select.on('select', function (e) {
     selected = layer;
     document.getElementById("detail").style.display = "block";
     document.getElementById("trackName").innerText = name;
+    var lines = e.selected[0].getGeometry().getCoordinates();
+    var current = {
+      distance: 0,
+      up: 0,
+      down: 0,
+      coordinate: toLonLat(e.selected[0].getGeometry().getFirstCoordinate())
+    }
+    var previous = Object.assign({}, current);
+    var waypoints = [previous];
+    dataset.data = [ {x: 0, y: current.coordinate[2] } ];
+    profile.update();
+    lines.forEach(
+      line => line.forEach(point => {
+        const coordinate = toLonLat(point);
+        current.distance += getDistance(current.coordinate, coordinate);
+        const delta = current.coordinate[2] - coordinate[2];
+        current.up += delta > 0 ? delta : 0;
+        current.down += delta < 0 ? -delta : 0;
+        current.coordinate = coordinate;
+        if(current.distance > previous.distance > 100 ||
+          current.up > previous.up + 10 ||
+          current.down > previous.down + 10) {
+            waypoints.push(current);
+            dataset.data.push({x: current.distance / 1000.0, y:  current.coordinate[2] });
+            previous = Object.assign({}, current);
+          }
+      }));
+    profile.update();
   } else {
-    document.getElementById("detail").style.display = "none";
+    document.getElementById("detail").style.display = "block";
   }
 });
