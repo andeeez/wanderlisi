@@ -248,10 +248,10 @@ select.on('select', function (e) {
           current.up > previous.up + 10 ||
           current.down > previous.down + 10) {
             var distance = (current.distance - previous.distance);
-            var slope = 100 * ((current.up - previous.up) - (current.down - previous.down)) / distance;
-            var speed = 0.11 + .67 * Math.exp( (-(slope + 2)^2) / 1800);
+            var slope = ((current.up - previous.up) - (current.down - previous.down)) / distance;
+            var speed = 6 * 0.77 * Math.exp( -3.5 * Math.abs(slope + 0.05) ) / 3.6
             var time = (distance / speed) / 60;
-            console.log(distance, slope, speed * 3.6, time)
+            console.log(distance, slope, speed, time)
             current.time = previous.time + time;
             waypoints.push(current);
             dataset.data.push({x: current.distance / 1000.0, y:  current.coordinate[2] });
