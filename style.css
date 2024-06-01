@@ -24,8 +24,8 @@ body {
 }
 
 #trackName {
-  font-size: 100%;
-  font-weight: normal;
+  font-size: 110%;
+  font-weight: bold;
   padding: 10px 6px;
 }
 
@@ -52,4 +52,16 @@ body {
 
 #time {
   font-weight: bold;
+}
+
+@media only screen and (max-width: 767px) {
+  
+  #trackName {
+    font-size: 100%;
+   
+  }
+  
+  #info {
+    font-size: 14px;
+  }
 }
