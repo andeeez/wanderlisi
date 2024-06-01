@@ -45,6 +45,7 @@ const processedLayers =  []
 
 // Load Tracks
 
+var trackIndex = 0;
 const format = new GPX();
 const readFeatures_ = format.readFeatures;
 format.readFeatures = function(source, options) {
@@ -54,6 +55,11 @@ format.readFeatures = function(source, options) {
     features.forEach(feature => {
       if(feature.getGeometry().getType() == "MultiLineString") {
         feature.set("name", meta.name);
+        var track = tracks[trackIndex++];
+        if(track.name) {
+          track = track.name
+        }
+        feature.set("gpxUrl", "tracks/"+track);
       }
     })
   }
@@ -223,6 +229,7 @@ select.on('select', function (e) {
       distance: 0,
       up: 0,
       down: 0,
+      time: 0,
       coordinate: toLonLat(e.selected[0].getGeometry().getFirstCoordinate())
     }
     var previous = Object.assign({}, current);
@@ -233,26 +240,37 @@ select.on('select', function (e) {
       line => line.forEach(point => {
         const coordinate = toLonLat(point);
         current.distance += getDistance(current.coordinate, coordinate);
-        const delta = current.coordinate[2] - coordinate[2];
+        const delta = coordinate[2] - current.coordinate[2];
         current.up += delta > 0 ? delta : 0;
         current.down += delta < 0 ? -delta : 0;
         current.coordinate = coordinate;
-        if(current.distance > previous.distance > 100 ||
+        if(current.distance > previous.distance + 100 ||
           current.up > previous.up + 10 ||
           current.down > previous.down + 10) {
+            var distance = (current.distance - previous.distance);
+            var slope = 100 * ((current.up - previous.up) - (current.down - previous.down)) / distance;
+            var speed = 0.11 + .67 * Math.exp( (-(slope + 2)^2) / 1800);
+            var time = (distance / speed) / 60;
+            console.log(distance, slope, speed * 3.6, time)
+            current.time = previous.time + time;
             waypoints.push(current);
             dataset.data.push({x: current.distance / 1000.0, y:  current.coordinate[2] });
             previous = Object.assign({}, current);
           }
       }));
-    const kmEffort = current.distance / 1000 + current.up / 100;
-    const totalMinutes = kmEffort * 60/4.5;
+    const minutesDistance = 60 * (current.distance / 1000.0) / 4.5
+    const minutesUp = 60 * current.up / 400.0;
+    const minutesDown = 0; //60 * current.down / 1000.0;
+    const minutesVertical = minutesUp < minutesDown ? minutesDown + minutesUp / 2 : minutesUp + minutesDown / 2;
+    const totalMinutes = current.time; //minutesDistance + minutesVertical;
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.round(totalMinutes % 60);
-    document.getElementById("time").innerText = hours + ":" + String(minutes).padStart(2, '0');
+    document.getElementById("time").innerText = hours + "h" + String(minutes).padStart(2, '0')+"'";
     document.getElementById("distance").innerText = Math.round(current.distance / 100.0) / 10;
     document.getElementById("up").innerText = Math.round(current.up);
     document.getElementById("down").innerText = Math.round(current.down);
+    const gpxUrl = e.selected[0].get("gpxUrl");
+    document.getElementById("gpx").href = gpxUrl;
     profile.update();
   } else {
     document.getElementById("detail").style.display = "none";
