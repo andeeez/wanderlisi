@@ -18,7 +18,7 @@ while True:
         doc = parse(filepath)
         name = doc.getElementsByTagName("name")[0].firstChild.nodeValue
         stripped = name.replace(u'–', '-')
-        trackName = "".join( x for x in stripped if (x.isalnum() or x in "_-() "))
+        trackName = "".join( x for x in stripped if (x.isalnum() or x in ",_-() "))
         try:
             os.mkdir(basedir+"/"+trackName)
         except Exception as e:
