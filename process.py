@@ -13,7 +13,7 @@ if len(sys.argv) <= 1:
 
 basedir = sys.argv[1]
 
-for i in range(6):
+while True:
     for filepath in glob.iglob(basedir + '/*.gpx'):
         doc = parse(filepath)
         name = doc.getElementsByTagName("name")[0].firstChild.nodeValue
