@@ -230,6 +230,8 @@ select.on('select', function (e) {
       time: 0,
       coordinate: toLonLat(e.selected[0].getGeometry().getFirstCoordinate())
     }
+    var highest = 0;
+    var lowest = 9999;
     var previous = Object.assign({}, current);
     var waypoints = [previous];
     dataset.data = [ {x: 0, y: current.coordinate[2] } ];
@@ -239,6 +241,8 @@ select.on('select', function (e) {
         const coordinate = toLonLat(point);
         current.distance += getDistance(current.coordinate, coordinate);
         const delta = coordinate[2] - current.coordinate[2];
+        highest = Math.max(highest, coordinate[2]);
+        lowest = Math.min(lowest, coordinate[2]);
         current.up += delta > 0 ? delta : 0;
         current.down += delta < 0 ? -delta : 0;
         current.coordinate = coordinate;
