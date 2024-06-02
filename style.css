@@ -80,10 +80,10 @@ body {
   position: absolute;
   right: 0;
   left: 0;
-  top: 40px;
+  top: 38px;
   height: 180px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 6px;
+  padding-right: 4px;
 }
 
 a:link, a:visited, a:hover, a:active {

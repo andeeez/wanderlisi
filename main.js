@@ -295,7 +295,7 @@ select.on('select', function (e) {
     options.scales = {
       x: {
         ticks: {
-          stepSize: 1
+          stepSize: 2
         },
         min: 0,
         max: Math.ceil(distanceRange * ratio),
