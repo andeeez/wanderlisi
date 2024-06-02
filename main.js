@@ -283,19 +283,32 @@ select.on('select', function (e) {
     const gpxUrl = e.selected[0].get("gpxUrl");
     document.getElementById("gpx").href = gpxUrl;
 
-    console.log(lowest)
     const roundedLowest = Math.floor(lowest / 100) * 100;
+    const ratio = Math.max(
+      1,
+      Math.max(
+        (highest-lowest) / elevationRange,
+        (current.distance / 1000) / distanceRange
+      )
+    )
+    console.log(ratio)
     options.scales = {
       x: {
         min: 0,
-        max: distanceRange
+        max: Math.ceil(distanceRange * ratio),
+        grid: {
+          color: ratio > 1 ? "#cc55cc40" : "rgba(0,0,0,0.1)"
+        }
       },
       y: {
         ticks: {
           stepSize: 100
         },
         min: roundedLowest,
-        max: roundedLowest + elevationRange
+        max: roundedLowest + Math.ceil(elevationRange * ratio / 100) * 100,
+        grid: {
+          color: ratio > 1 ? "#cc55cc40" : "rgba(0,0,0,0.1)"
+        }
       }
     };
 
