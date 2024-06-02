@@ -20,6 +20,16 @@ import tracks from './tracks/' with { type: 'json' };
 
 // Map Config
 
+const view = new View({
+    extent: [650000, 5660000, 1180000, 6230000],
+    minZoom: 7,
+    maxZoom: 17,
+    enableRotation: false,
+    center: fromLonLat([7.6, 46.92]),
+    zoom: 8.5,
+  });
+view.on("change", console.log)
+
 const map = new Map({
   target: 'map',
   layers: [
@@ -29,13 +39,7 @@ const map = new Map({
       })
     })
   ],
-  view: new View({
-    minZoom: 7,
-    maxZoom: 17,
-    enableRotation: false,
-    center: fromLonLat([7.6, 46.92]),
-    zoom: 8.5,
-  }),
+  view: view,
 });
 
 const center = map.getView().getCenter();
