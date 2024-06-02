@@ -173,14 +173,7 @@ const profile = new Chart(
         tooltip: {
           enabled: false
         }
-      },
-      animations: {
-        radius: {
-          duration: 200,
-          easing: 'linear',
-          loop: (context) => context.active
-        }
-      },
+      }
     },
     data: {
       datasets: [
@@ -220,7 +213,7 @@ select.on('select', function (e) {
     layer.setZIndex(1);
     const name = e.selected[0].get("name");
     selected = layer;
-    document.getElementById("detail").style.display = "block";
+    document.getElementById("detail-container").classList.add("show-detail-container");
     document.getElementById("trackName").innerText = name;
     var lines = e.selected[0].getGeometry().getCoordinates();
     var current = {
@@ -274,6 +267,6 @@ select.on('select', function (e) {
     document.getElementById("gpx").href = gpxUrl;
     profile.update();
   } else {
-    document.getElementById("detail").style.display = "none";
+    document.getElementById("detail-container").classList.remove("show-detail-container");
   }
 });
