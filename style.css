@@ -24,24 +24,42 @@ body {
 }
 
 #trackName {
+  position: fixed;
+  left: 0;
+  right: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   height: 20px;
-  font-size: 120%;
+  font-size: 100%;
   font-weight: bold;
   padding-left: 6px;
+  padding-right: 40px;
+}
+
+#toolbar {
+  width: 32px;
+  position: fixed;
+  right: 0;
+  left: auto;
 }
 
 #profile-container {
+  margin-top: 20px;
   height: 180px;
 }
 
-#profile {
+a:link, a:visited, a:hover, a:active {
+  color: black;
 }
 
 #info {
-  background-color: #ffffff80;
+  background-color: #ffffff90;
+  box-shadow: white 0 0 10px;
   width: 70px;
   padding: 4px;
   position: fixed;
+  margin-top: 28px;
   right: 0;
   left: auto;
 }
@@ -53,4 +71,8 @@ body {
 
 #time {
   font-weight: bold;
+}
+
+.fa {
+  opacity: 0.4;
 }

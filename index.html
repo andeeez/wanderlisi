@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>wanderlisi</title>
     <link href="https://cdn.skypack.dev/ol/ol.css" rel="stylesheet">
-    <link href="./style.css?4" rel="stylesheet">
+    <link href="./style.css?5" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
     <div id="map"></div>
     <div id="detail">
       <div id="trackName">&nbsp;</div>
+      <div id="toolbar"></span>&nbsp;<a id="gpx" href="x"><i id="open" class="fa fa-share"></i></a></div>
       <div id="info">
-        <div class="info-line"><span id="time"></span></div>
+        <div class="info-line"><span id="time"></div>
         <div class="info-line"><span id="distance"></span>&nbsp;km&#x202F;</div>
         <div class="info-line"><span id="up"></span>&nbsp;m&#x202F;&#x2197;</div>
         <div class="info-line"><span id="down"></span>&nbsp;m&#x202F;&#x2198;</div>
-        <div class="info-line" style="display: none"><a id="gpx" href="x">GPX</a></div>
       </div>
-
       <div id="profile-container"><canvas width="320" height="160" id="profile"></canvas></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="./main.js?4"></script>
+    <script type="module" src="./main.js?5"></script>
   </body>
 </html>

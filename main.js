@@ -55,11 +55,6 @@ format.readFeatures = function(source, options) {
     features.forEach(feature => {
       if(feature.getGeometry().getType() == "MultiLineString") {
         feature.set("name", meta.name);
-        var track = tracks[trackIndex++];
-        if(track.name) {
-          track = track.name
-        }
-        feature.set("gpxUrl", "tracks/"+track);
       }
     })
   }
@@ -74,6 +69,9 @@ tracks.forEach(track => {
   const source = new VectorSource({
       url: 'tracks/'+track,
       format: format,
+  });
+  source.on("addfeature", e => {
+    e.feature.set("gpxUrl", e.target.getUrl());
   });
   const layer = new VectorLayer({
     source: source,
@@ -251,7 +249,6 @@ select.on('select', function (e) {
             var slope = ((current.up - previous.up) - (current.down - previous.down)) / distance;
             var speed = 6 * 0.77 * Math.exp( -3.5 * Math.abs(slope + 0.05) ) / 3.6
             var time = (distance / speed) / 60;
-            console.log(distance, slope, speed, time)
             current.time = previous.time + time;
             waypoints.push(current);
             dataset.data.push({x: current.distance / 1000.0, y:  current.coordinate[2] });
