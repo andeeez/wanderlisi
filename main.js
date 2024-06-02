@@ -160,21 +160,38 @@ const dataset = {
   ]
 };
 
+const elevationRange = 1000;
+const distanceRange = 20;
+
+const options = {
+  locale: "de-CH",
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false
+    },
+    tooltip: {
+      enabled: false
+    },
+  },
+  scales: {
+    x: {
+      max: distanceRange
+    }
+  },
+  animations: {
+    y: {
+      duration: 1000,
+      easing: 'easeOutBack'
+    }
+  }
+}
+
 const profile = new Chart(
   document.getElementById('profile'),
   {
     type: 'scatter',
-    options: {
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          enabled: false
-        }
-      }
-    },
+    options: options,
     data: {
       datasets: [
         dataset
@@ -259,12 +276,29 @@ select.on('select', function (e) {
     const totalMinutes = current.time; //minutesDistance + minutesVertical;
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.round(totalMinutes % 60);
-    document.getElementById("time").innerText = hours + "h" + String(minutes).padStart(2, '0')+"'";
-    document.getElementById("distance").innerText = Math.round(current.distance / 100.0) / 10;
-    document.getElementById("up").innerText = Math.round(current.up);
-    document.getElementById("down").innerText = Math.round(current.down);
+    document.getElementById("time").innerText = hours + " h " + String(minutes).padStart(2, '0');
+    document.getElementById("distance").innerText = (Math.round(current.distance / 100.0) / 10).toLocaleString('de-CH');
+    document.getElementById("up").innerText = Math.round(current.up).toLocaleString('de-CH');
+    document.getElementById("down").innerText = Math.round(current.down).toLocaleString('de-CH');
     const gpxUrl = e.selected[0].get("gpxUrl");
     document.getElementById("gpx").href = gpxUrl;
+
+    console.log(lowest)
+    const roundedLowest = Math.floor(lowest / 100) * 100;
+    options.scales = {
+      x: {
+        min: 0,
+        max: distanceRange
+      },
+      y: {
+        ticks: {
+          stepSize: 100
+        },
+        min: roundedLowest,
+        max: roundedLowest + elevationRange
+      }
+    };
+
     profile.update();
   } else {
     document.getElementById("detail-container").classList.remove("show-detail-container");
