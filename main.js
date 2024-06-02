@@ -21,7 +21,7 @@ import tracks from './tracks/' with { type: 'json' };
 // Map Config
 
 const view = new View({
-    extent: [650000, 5660000, 1180000, 6230000],
+    extent: [640000, 5660000, 1200000, 6190000],
     minZoom: 7,
     maxZoom: 17,
     enableRotation: false,
@@ -34,6 +34,7 @@ const map = new Map({
   target: 'map',
   layers: [
     new TileLayer({
+      extent: [640000, 5660000, 1200000, 6190000],
       source: new XYZ({
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
       })
