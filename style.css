@@ -68,6 +68,7 @@ body {
 }
 
 #toolbar {
+  text-align: right;
   width: 32px;
   position: absolute;
   right: 0;

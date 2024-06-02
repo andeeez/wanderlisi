@@ -297,7 +297,7 @@ select.on('select', function (e) {
         min: 0,
         max: Math.ceil(distanceRange * ratio),
         grid: {
-          color: ratio > 1 ? "#cc55cc40" : "rgba(0,0,0,0.1)"
+          color: ratio > 1 ? "#cc55cc60" : "rgba(0,0,0,0.1)"
         }
       },
       y: {
@@ -307,7 +307,7 @@ select.on('select', function (e) {
         min: roundedLowest,
         max: roundedLowest + Math.ceil(elevationRange * ratio / 100) * 100,
         grid: {
-          color: ratio > 1 ? "#cc55cc40" : "rgba(0,0,0,0.1)"
+          color: ratio > 1 ? "#cc55cc60" : "rgba(0,0,0,0.1)"
         }
       }
     };
