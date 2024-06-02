@@ -6,6 +6,7 @@ body {
 }
 
 #map {
+  background: #eee;
   position: absolute;
   top: 0;
   bottom: 0;
