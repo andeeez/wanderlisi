@@ -35,6 +35,7 @@ const map = new Map({
   layers: [
     new TileLayer({
       extent: [640000, 5660000, 1200000, 6190000],
+      preload: 1,
       source: new XYZ({
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
       })
