@@ -73,7 +73,7 @@ tracks.forEach(track => {
   }
 
   const source = new VectorSource({
-      url: 'tracks/'+track,
+      url: 'tracks/'+(/^.*\....$/.test(track) ? track : track+"/"+track+".gpx"),
       format: format,
   });
   source.on("addfeature", e => {
