@@ -294,10 +294,13 @@ select.on('select', function (e) {
     console.log(ratio)
     options.scales = {
       x: {
+        ticks: {
+          stepSize: 1
+        },
         min: 0,
         max: Math.ceil(distanceRange * ratio),
         grid: {
-          color: ratio > 1 ? "#cc55cc60" : "rgba(0,0,0,0.1)"
+          color: ratio > 1 ? "#cc33cc80" : "rgba(0,0,0,0.1)"
         }
       },
       y: {
@@ -307,7 +310,7 @@ select.on('select', function (e) {
         min: roundedLowest,
         max: roundedLowest + Math.ceil(elevationRange * ratio / 100) * 100,
         grid: {
-          color: ratio > 1 ? "#cc55cc60" : "rgba(0,0,0,0.1)"
+          color: ratio > 1 ? "#cc33cc80" : "rgba(0,0,0,0.1)"
         }
       }
     };
