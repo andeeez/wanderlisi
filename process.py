@@ -17,7 +17,7 @@ while True:
     for filepath in glob.iglob(basedir + '/*.gpx'):
         doc = parse(filepath)
         name = doc.getElementsByTagName("name")[0].firstChild.nodeValue
-        stripped = name.replace(u'–', '-')
+        stripped = name.replace('\u2013', '-')
         trackName = "".join( x for x in stripped if (x.isalnum() or x in ",_-() "))
         try:
             os.mkdir(basedir+"/"+trackName)
