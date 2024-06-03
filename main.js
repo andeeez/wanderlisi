@@ -9,12 +9,14 @@ import XYZ from 'https://cdn.skypack.dev/ol/source/XYZ.js';
 import {fromLonLat, toLonLat} from 'https://cdn.skypack.dev/ol/proj.js';
 import {getDistance} from 'https://cdn.skypack.dev/ol/sphere.js';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'https://cdn.skypack.dev/ol/style.js';
-
 import Select from 'https://cdn.skypack.dev/ol/interaction/Select.js';
 import {click} from 'https://cdn.skypack.dev/ol/events/condition.js';
 
 import GPX from 'https://cdn.skypack.dev/ol/format/GPX.js';
 import tracks from './tracks/' with { type: 'json' };
+
+const params = window.location.hash.match(/:t:([^:]*):/)
+const selectedTrack = params!=null && params.length > 1 ? decodeURIComponent(params[1]) : null;
 
 // Map Config
 
@@ -42,14 +44,14 @@ const map = new Map({
   view: view,
 });
 
-const center = map.getView().getCenter();
 const startPinSource = new VectorSource ();
 const endPinSource = new VectorSource ();
 const processedLayers =  []
 
 // Load Tracks
 
-var trackIndex = 0;
+const trackMap = {}
+
 const format = new GPX();
 const readFeatures_ = format.readFeatures;
 format.readFeatures = function(source, options) {
@@ -97,6 +99,11 @@ tracks.forEach(track => {
           if(processedLayers.indexOf(layer) == -1 && (type == "LineString" ||
               type == "MultiLineString")) {
             processedLayers.push(layer);
+            if(feature.get("name") == selectedTrack) {
+              selectTrack(layer, feature);
+              view.fit(feature.getGeometry(), { maxZoom: 11 });
+              select.getFeatures().push(feature);
+            }
             const first = new Point(feature.getGeometry().getFirstCoordinate());
             const last = new Point(feature.getGeometry().getLastCoordinate());
             startPinSource.addFeature(new Feature(first));
@@ -224,25 +231,19 @@ const select = new Select({
 
 var selected = null;
 
-map.addInteraction(select);
-select.on('select', function (e) {
-  if(selected != null) {
-    selected.setZIndex(0);
-  }
-  if(e.selected.length > 0) {
-    const layer = select.getLayer(e.selected[0]);
+function selectTrack(layer, feature) {
     layer.setZIndex(1);
-    const name = e.selected[0].get("name");
+    const name = feature.get("name");
     selected = layer;
     document.getElementById("detail-container").classList.add("show-detail-container");
     document.getElementById("trackName").innerText = name;
-    var lines = e.selected[0].getGeometry().getCoordinates();
+    var lines = feature.getGeometry().getCoordinates();
     var current = {
       distance: 0,
       up: 0,
       down: 0,
       time: 0,
-      coordinate: toLonLat(e.selected[0].getGeometry().getFirstCoordinate())
+      coordinate: toLonLat(feature.getGeometry().getFirstCoordinate())
     }
     var highest = 0;
     var lowest = 9999;
@@ -273,18 +274,15 @@ select.on('select', function (e) {
             previous = Object.assign({}, current);
           }
       }));
-    const minutesDistance = 60 * (current.distance / 1000.0) / 4.5
-    const minutesUp = 60 * current.up / 400.0;
-    const minutesDown = 0; //60 * current.down / 1000.0;
-    const minutesVertical = minutesUp < minutesDown ? minutesDown + minutesUp / 2 : minutesUp + minutesDown / 2;
-    const totalMinutes = current.time; //minutesDistance + minutesVertical;
+
+    const totalMinutes = current.time;
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.round(totalMinutes % 60);
     document.getElementById("time").innerText = hours + " h " + String(minutes).padStart(2, '0');
     document.getElementById("distance").innerText = (Math.round(current.distance / 100.0) / 10).toLocaleString('de-CH');
     document.getElementById("up").innerText = Math.round(current.up).toLocaleString('de-CH');
     document.getElementById("down").innerText = Math.round(current.down).toLocaleString('de-CH');
-    const gpxUrl = e.selected[0].get("gpxUrl");
+    const gpxUrl = feature.get("gpxUrl");
     document.getElementById("gpx").href = gpxUrl;
 
     const roundedLowest = Math.floor(lowest / 100) * 100;
@@ -295,7 +293,7 @@ select.on('select', function (e) {
         (current.distance / 1000) / distanceRange
       )
     )
-    console.log(ratio)
+
     options.scales = {
       x: {
         ticks: {
@@ -318,9 +316,20 @@ select.on('select', function (e) {
         }
       }
     };
-
     profile.update();
+    window.location.hash = ":t:"+encodeURIComponent(name)+":";
+}
+
+map.addInteraction(select);
+select.on('select', function (e) {
+  if(selected != null) {
+    selected.setZIndex(0);
+  }
+  if(e.selected.length > 0) {
+    const layer = select.getLayer(e.selected[0]);
+    selectTrack(layer, e.selected[0]);
   } else {
     document.getElementById("detail-container").classList.remove("show-detail-container");
+    window.location.hash = "";
   }
 });
