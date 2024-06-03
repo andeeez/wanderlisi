@@ -134,35 +134,36 @@ body {
   height: 200px;
   text-wrap: nowrap;
   padding-top: 8px;
-  padding-left: 20px;
-  margin-right: 32px;
+  margin-left: 16px;
+  margin-right: 16px;
   float: left;
 }
 
-#filler {
+.filler {
   float: left;
 }
 
 #images img {
-  padding-left: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 
 #left-gradient {
   position: absolute;
   left: 0;
-  width: 28px;
+  width: 24px;
   height: 200px;
   top: 220px;
-  background: linear-gradient(to right, rgba(255, 255, 255), rgb(255, 255, 255, 0));
+  background: linear-gradient(to right, rgba(255, 255, 255), rgba(255, 255, 255),rgb(255, 255, 255, 0));
 }
 
 #right-gradient {
   position: absolute;
   right: 0;
-  width: 28px;
+  width: 24px;
   height: 200px;
   top: 220px;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgb(255, 255, 255));
+  background: linear-gradient(to right, rgba(255, 255, 255, 0),rgba(255, 255, 255), rgb(255, 255, 255));
 }
 
 a:link, a:visited, a:hover, a:active {

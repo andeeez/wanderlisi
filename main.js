@@ -231,7 +231,7 @@ const select = new Select({
 
 var selectedLayer = null;
 var lastTrack = null;
-var showImages = true;
+var showImages = false;
 
 function updateImageView() {
   if(showImages && document.getElementById("images").innerHTML != "") {
