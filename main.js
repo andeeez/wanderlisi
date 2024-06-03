@@ -1,12 +1,10 @@
 import Map from 'https://cdn.skypack.dev/ol/Map.js';
 import View from 'https://cdn.skypack.dev/ol/View.js';
 import Feature from 'https://cdn.skypack.dev/ol/Feature.js';
-import LineString from 'https://cdn.skypack.dev/ol/geom/LineString.js';
 import Point from 'https://cdn.skypack.dev/ol/geom/Point.js';
 import TileLayer from 'https://cdn.skypack.dev/ol/layer/Tile.js';
 import VectorLayer from 'https://cdn.skypack.dev/ol/layer/Vector.js';
 import VectorSource from 'https://cdn.skypack.dev/ol/source/Vector.js';
-import OSM from 'https://cdn.skypack.dev/ol/source/OSM.js';
 import XYZ from 'https://cdn.skypack.dev/ol/source/XYZ.js';
 import {fromLonLat, toLonLat} from 'https://cdn.skypack.dev/ol/proj.js';
 import {getDistance} from 'https://cdn.skypack.dev/ol/sphere.js';
@@ -28,7 +26,6 @@ const view = new View({
     center: fromLonLat([7.6, 46.92]),
     zoom: 8.5,
   });
-view.on("change", console.log)
 
 const map = new Map({
   target: 'map',
@@ -37,6 +34,7 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       source: new XYZ({
+        zDirection: -1,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
       })
     })
