@@ -25,6 +25,7 @@ while True:
             sys.stderr.write("Warning: "+str(e)+"\n")
         try:
             shutil.copyfile(filepath, basedir+"/"+trackName+"/"+trackName+".gpx")
+            shutil.copyfile(basedir+"/index.php", basedir+"/"+trackName+"/index.php")
             os.remove(filepath)
         except Exception as e:
             sys.stderr.write(str(e)+"\n")
