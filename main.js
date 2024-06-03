@@ -15,7 +15,7 @@ import {click} from 'https://cdn.skypack.dev/ol/events/condition.js';
 import GPX from 'https://cdn.skypack.dev/ol/format/GPX.js';
 import tracks from './tracks/' with { type: 'json' };
 
-const params = window.location.hash.match(/:t:([^:]*):/)
+const params = window.location.hash.match(/:t:([^:]*)/)
 const selectedTrack = params!=null && params.length > 1 ? decodeURIComponent(params[1]) : null;
 
 // Map Config
@@ -231,7 +231,7 @@ const select = new Select({
 
 var selectedLayer = null;
 var lastTrack = null;
-var showImages = false;
+var showImages = true;
 
 function updateImageView() {
   if(showImages && document.getElementById("images").innerHTML != "") {
@@ -342,7 +342,7 @@ function selectTrack(layer, feature) {
       }
     };
     profile.update();
-    window.location.hash = ":t:"+encodeURIComponent(name)+":";
+    window.location.hash = ":t:"+encodeURIComponent(name);
 
     if(lastTrack != name || document.getElementById("images").innerHTML=='') {
       var xmlhttp = new XMLHttpRequest();
