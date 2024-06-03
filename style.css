@@ -45,6 +45,10 @@ body {
   height: 220px;
 }
 
+.expand-detail-container {
+  height: 420px;
+}
+
 #detail {
   position: relative;
   top: 0;
@@ -69,7 +73,7 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  margin-right: 38px;
+  margin-right: 72px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -82,12 +86,28 @@ body {
 
 #toolbar {
   text-align: right;
-  width: 32px;
+  font-size: 110%;
+  white-space: nowrap;
+  width: 64px;
   position: absolute;
-  right: 0;
+  right: 6px;
   left: auto;
-  padding: 6px 10px;
+  padding-top: 6px;
+}
+
+.button {
   opacity: 0.4;
+  padding-left: 6px;
+  padding-right: 6px;
+  cursor: pointer;
+}
+
+.active-button {
+  opacity: 0.6;
+}
+
+#images-button {
+  display: none;
 }
 
 #profile-container {
@@ -98,6 +118,15 @@ body {
   height: 180px;
   padding-left: 6px;
   padding-right: 4px;
+}
+
+#images {
+  padding-top: 12px;
+  position: absolute;
+  top: 220px;
+}
+#images img {
+  padding-left: 10px;
 }
 
 a:link, a:visited, a:hover, a:active {

@@ -229,14 +229,39 @@ const select = new Select({
   }
 });
 
-var selected = null;
+var selectedLayer = null;
+var lastTrack = null;
+var showImages = false;
+
+function updateImageView() {
+  if(showImages && document.getElementById("images").innerHTML != "") {
+    document.getElementById("detail-container").classList.add("expand-detail-container");
+    document.getElementById("images-button").classList.add("active-button");
+  } else {
+    document.getElementById("detail-container").classList.remove("expand-detail-container");
+    document.getElementById("images-button").classList.remove("active-button");
+  }
+}
+
+document.getElementById("images-button").addEventListener("click", () => {
+  showImages = !showImages;
+  updateImageView();
+});
+
+function clean(s) {
+  return s.replaceAll('–', '-')
+}
 
 function selectTrack(layer, feature) {
     layer.setZIndex(1);
     const name = feature.get("name");
-    selected = layer;
+    selectedLayer = layer;
     document.getElementById("detail-container").classList.add("show-detail-container");
     document.getElementById("trackName").innerText = name;
+    if(name != lastTrack) {
+      document.getElementById("images").innerHTML = '';
+    }
+    lastTrack = name;
     var lines = feature.getGeometry().getCoordinates();
     var current = {
       distance: 0,
@@ -318,18 +343,52 @@ function selectTrack(layer, feature) {
     };
     profile.update();
     window.location.hash = ":t:"+encodeURIComponent(name)+":";
+
+    if(lastTrack != name || document.getElementById("images").innerHTML=='') {
+      var xmlhttp = new XMLHttpRequest();
+      var folder = "tracks/"+clean(name)+"/";
+
+      document.getElementById("images-button").style.display = "none";
+      xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+              var list = JSON.parse(this.responseText);
+              var images = list
+                .map(item => item.name ? item.name : item)
+                .filter(filename => {
+                  const ext = filename.split('.').pop().toLowerCase();
+                  return ext == "jpg" || ext == "jpeg";
+                });
+              if(images.length > 0) {
+                document.getElementById("images-button").style.display = "inline";
+                images.forEach(filename => {
+                    var elem = document.createElement("img");
+                    elem.setAttribute("src", folder+filename);
+                    elem.setAttribute("height", "180");
+                    document.getElementById("images").appendChild(elem);
+                });
+              }
+              updateImageView();
+          }
+      };
+      xmlhttp.open("GET", folder, true);
+      xmlhttp.send();
+    } else {
+      updateImageView();
+    }
 }
 
 map.addInteraction(select);
 select.on('select', function (e) {
-  if(selected != null) {
-    selected.setZIndex(0);
+  if(selectedLayer != null) {
+    selectedLayer.setZIndex(0);
   }
   if(e.selected.length > 0) {
     const layer = select.getLayer(e.selected[0]);
     selectTrack(layer, e.selected[0]);
   } else {
     document.getElementById("detail-container").classList.remove("show-detail-container");
+    document.getElementById("detail-container").classList.remove("expand-detail-container");
+    document.getElementById("images-button").classList.remove("active-button");
     window.location.hash = "";
   }
 });
