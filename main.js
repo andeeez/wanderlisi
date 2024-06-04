@@ -246,6 +246,22 @@ function updateImageView() {
   }
 }
 
+function toggleImageViewer() {
+  var big = document.getElementById("image-viewer").classList.contains("image-viewer-normal");
+  if(big) {
+    document.getElementById("image-viewer").classList.remove("image-viewer-normal");
+    document.getElementById("image-viewer").classList.add("image-viewer-big");
+  } else {
+    document.getElementById("image-viewer").classList.add("image-viewer-normal");
+    document.getElementById("image-viewer").classList.remove("image-viewer-big");
+  }
+    const images = document.getElementsByClassName("image");
+    const len = images !== null ? images.length : 0;
+    for(var i=0; i < len; i++) {
+        images[i].style.height = "100%";
+    }
+}
+
 document.getElementById("images-button").addEventListener("click", () => {
   showImages = !showImages;
   updateImageView();
@@ -366,7 +382,9 @@ function selectTrack(layer, feature) {
                 images.forEach(filename => {
                     var elem = document.createElement("img");
                     elem.setAttribute("src", folder+filename);
-                    elem.setAttribute("height", "180");
+                    elem.setAttribute("height", "100%");
+                    elem.classList.add("image");
+                    elem.addEventListener("click", toggleImageViewer);
                     document.getElementById("images").appendChild(elem);
                 });
               }
