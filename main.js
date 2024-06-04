@@ -246,7 +246,7 @@ function updateImageView() {
   }
 }
 
-function toggleImageViewer() {
+function toggleImageViewer(clear) {
   var big = document.getElementById("image-viewer").classList.contains("image-viewer-normal");
   if(big) {
     document.getElementById("image-viewer").classList.remove("image-viewer-normal");
@@ -266,10 +266,6 @@ document.getElementById("images-button").addEventListener("click", () => {
   showImages = !showImages;
   updateImageView();
 });
-
-function clean(s) {
-  return s.replaceAll('–', '-')
-}
 
 function selectTrack(layer, feature) {
     layer.setZIndex(1);
@@ -384,7 +380,7 @@ function selectTrack(layer, feature) {
                     elem.setAttribute("src", folder+filename);
                     elem.setAttribute("height", "100%");
                     elem.classList.add("image");
-                    elem.addEventListener("click", toggleImageViewer);
+                    elem.addEventListener("click", ()=> toggleImageViewer() );
                     document.getElementById("images").appendChild(elem);
                 });
               }
@@ -410,6 +406,7 @@ select.on('select', function (e) {
     document.getElementById("detail-container").classList.remove("show-detail-container");
     document.getElementById("detail-container").classList.remove("expand-detail-container");
     document.getElementById("images-button").classList.remove("active-button");
+    toggleImageViewer(true);
     window.location.hash = "";
   }
 });
