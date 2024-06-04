@@ -248,7 +248,7 @@ function updateImageView() {
 
 function toggleImageViewer(clear) {
   var big = document.getElementById("image-viewer").classList.contains("image-viewer-normal");
-  if(big) {
+  if(big && !clear) {
     document.getElementById("image-viewer").classList.remove("image-viewer-normal");
     document.getElementById("image-viewer").classList.add("image-viewer-big");
   } else {
