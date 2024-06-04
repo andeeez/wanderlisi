@@ -42,6 +42,7 @@ const map = new Map({
     })
   ],
   view: view,
+  controls: []
 });
 
 const startPinSource = new VectorSource ();
@@ -71,7 +72,9 @@ tracks.forEach(track => {
   if(track.name) {
     track = track.name
   }
-
+  if(track.indexOf(".") != -1 ) {
+    return;
+  }
   const source = new VectorSource({
       url: 'tracks/'+(/^.*\....$/.test(track) ? track : track+"/"+track+".gpx"),
       format: format,
@@ -346,7 +349,7 @@ function selectTrack(layer, feature) {
 
     if(lastTrack != name || document.getElementById("images").innerHTML=='') {
       var xmlhttp = new XMLHttpRequest();
-      var folder = "tracks/"+clean(name)+"/";
+      var folder = gpxUrl.substring(0, gpxUrl.lastIndexOf('/')+1);
 
       document.getElementById("images-button").style.display = "none";
       xmlhttp.onreadystatechange = function() {
