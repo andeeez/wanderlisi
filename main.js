@@ -287,7 +287,7 @@ function fetch(url, callback) {
 }
 
 function toggleNotes(clear) {
-  if(document.getElementById("notes").style.display = "none" && !clear) {
+  if(document.getElementById("notes").style.display == "none" && !clear) {
     document.getElementById("notes").style.display = "block";
     document.getElementById("track-data").style.display = "none";
     document.getElementById("notes-button").classList.add("active-button");
@@ -301,6 +301,7 @@ function toggleNotes(clear) {
 document.getElementById("notes-button").addEventListener("click", () => toggleNotes());
 
 function selectTrack(layer, feature) {
+    toggleNotes(true);
     layer.setZIndex(1);
     const name = feature.get("name");
     selectedLayer = layer;
