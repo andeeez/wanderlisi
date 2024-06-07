@@ -68,6 +68,8 @@ format.readFeatures = function(source, options) {
   return features;
 }
 
+var trackContent = {};
+
 tracks.forEach(track => {
   if(track.name) {
     track = track.name
@@ -80,7 +82,13 @@ tracks.forEach(track => {
       format: format,
   });
   source.on("addfeature", e => {
-    e.feature.set("gpxUrl", e.target.getUrl());
+    const gpxUrl = e.target.getUrl()
+    e.feature.set("gpxUrl", gpxUrl);
+    var folder = gpxUrl.substring(0, gpxUrl.lastIndexOf('/')+1);
+    fetch(folder+"/notes.md", response => {
+      trackContent[folder] = trackContent[folder] || {};
+      trackContent[folder].notes = marked.parse(response.responseText);
+    });
   });
   const layer = new VectorLayer({
     source: source,
@@ -115,7 +123,7 @@ tracks.forEach(track => {
         });
       }
     });
-    map.addLayer(layer);
+  map.addLayer(layer);
 });
 
 // Start/End Markers
@@ -267,12 +275,37 @@ document.getElementById("images-button").addEventListener("click", () => {
   updateImageView();
 });
 
+function fetch(url, callback) {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            callback(this);
+          }
+      };
+      xmlhttp.open("GET", url, true);
+      xmlhttp.send();
+}
+
+function toggleNotes(clear) {
+  if(document.getElementById("notes").style.display = "none" && !clear) {
+    document.getElementById("notes").style.display = "block";
+    document.getElementById("track-data").style.display = "none";
+    document.getElementById("notes-button").classList.add("active-button");
+  } else {
+    document.getElementById("notes").style.display = "none";
+    document.getElementById("track-data").style.display = "block";
+    document.getElementById("notes-button").classList.remove("active-button");
+  }
+}
+
+document.getElementById("notes-button").addEventListener("click", () => toggleNotes());
+
 function selectTrack(layer, feature) {
     layer.setZIndex(1);
     const name = feature.get("name");
     selectedLayer = layer;
     document.getElementById("detail-container").classList.add("show-detail-container");
-    document.getElementById("trackName").innerText = name;
+    document.getElementById("track-name").innerText = name;
     if(name != lastTrack) {
       document.getElementById("images").innerHTML = '';
     }
@@ -358,37 +391,39 @@ function selectTrack(layer, feature) {
     };
     profile.update();
     window.location.hash = ":t:"+encodeURIComponent(name);
+    var folder = gpxUrl.substring(0, gpxUrl.lastIndexOf('/')+1);
+    if(trackContent[folder]) {
+      document.getElementById("notes").innerHTML = trackContent[folder].notes;
+    } else {
+      fetch(folder+"/notes.md", response => {
+        trackContent[folder] = trackContent[folder] || {};
+        document.getElementById("notes").innerHTML = marked.parse(response.responseText);
+      });
+    }
 
     if(lastTrack != name || document.getElementById("images").innerHTML=='') {
-      var xmlhttp = new XMLHttpRequest();
-      var folder = gpxUrl.substring(0, gpxUrl.lastIndexOf('/')+1);
-
       document.getElementById("images-button").style.display = "none";
-      xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-              var list = JSON.parse(this.responseText);
-              var images = list
-                .map(item => item.name ? item.name : item)
-                .filter(filename => {
-                  const ext = filename.split('.').pop().toLowerCase();
-                  return ext == "jpg" || ext == "jpeg";
-                });
-              if(images.length > 0) {
-                document.getElementById("images-button").style.display = "inline";
-                images.forEach(filename => {
-                    var elem = document.createElement("img");
-                    elem.setAttribute("src", folder+filename);
-                    elem.setAttribute("height", "100%");
-                    elem.classList.add("image");
-                    elem.addEventListener("click", ()=> toggleImageViewer() );
-                    document.getElementById("images").appendChild(elem);
-                });
-              }
-              updateImageView();
-          }
-      };
-      xmlhttp.open("GET", folder, true);
-      xmlhttp.send();
+      fetch(folder, response => {
+        var list = JSON.parse(response.responseText);
+        var images = list
+          .map(item => item.name ? item.name : item)
+          .filter(filename => {
+            const ext = filename.split('.').pop().toLowerCase();
+            return ext == "jpg" || ext == "jpeg";
+          });
+        if(images.length > 0) {
+          document.getElementById("images-button").style.display = "inline";
+          images.forEach(filename => {
+              var elem = document.createElement("img");
+              elem.setAttribute("src", folder+filename);
+              elem.setAttribute("height", "100%");
+              elem.classList.add("image");
+              elem.addEventListener("click", ()=> toggleImageViewer() );
+              document.getElementById("images").appendChild(elem);
+          });
+        }
+        updateImageView();
+      });
     } else {
       updateImageView();
     }
