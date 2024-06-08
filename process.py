@@ -28,7 +28,7 @@ while True:
         try:
             shutil.copyfile(filepath, basedir+"/"+trackName+"/"+trackName+".gpx")
             os.remove(filepath)
-            if not new:
+            if new:
                 shutil.copyfile(basedir+"/index.php", basedir+"/"+trackName+"/index.php")
                 shutil.copyfile(basedir+"/notes.md", basedir+"/"+trackName+"/notes.md")
         except Exception as e:
