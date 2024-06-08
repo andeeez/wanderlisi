@@ -30,6 +30,53 @@ h3 {
   width: 100%;
 }
 
+.icon.fa {
+  padding-top: 4px;
+}
+
+#filter {
+  top: 12px;
+}
+
+#status {
+  top: 56px;
+  display: none;
+}
+
+#user {
+  top: 98px;
+  display: none;
+}
+
+.control {
+  position: absolute;
+  right: 12px;
+  font-size: 18px;
+  color: #999;
+  vertical-align: middle;
+  text-align: center;
+  width: 24px;
+  height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid #999;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 5px;
+  padding-bottom: 3px;
+  filter: grayscale(100%);
+  cursor: pointer;
+}
+
+.active {
+  color: black;
+  border-color: #333;
+  background: white;
+}
+
+
 #main-container {
   position: fixed;
   top:0;

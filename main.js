@@ -85,9 +85,19 @@ tracks.forEach(track => {
     const gpxUrl = e.target.getUrl()
     e.feature.set("gpxUrl", gpxUrl);
     var folder = gpxUrl.substring(0, gpxUrl.lastIndexOf('/')+1);
+    trackContent[folder] = trackContent[folder] || {};
     fetch(folder+"/notes.md", response => {
-      trackContent[folder] = trackContent[folder] || {};
       trackContent[folder].notes = marked.parse(response.responseText);
+      var values = response.responseText.split('\n')
+      .filter(line => /^\s*-/.test(line))
+      .filter(line => line.indexOf(":") > 0)
+      .map(line => line.split(":")[1])
+      .filter(line => line.length > 0)
+      .map(line => line.trim()[0])
+        .map(line => line.toLowerCase())
+      if(values.length >= 2) {
+        trackContent[folder].done = (values[0] != "n") * 1 + (values[1] != "n") * 2;
+      }
     });
   });
   const layer = new VectorLayer({
@@ -115,10 +125,13 @@ tracks.forEach(track => {
               view.fit(feature.getGeometry(), { maxZoom: 11 });
               select.getFeatures().push(feature);
             }
-            const first = new Point(feature.getGeometry().getFirstCoordinate());
-            const last = new Point(feature.getGeometry().getLastCoordinate());
-            startPinSource.addFeature(new Feature(first));
-            endPinSource.addFeature(new Feature(last));
+            const first = new Feature(new Point(feature.getGeometry().getFirstCoordinate()));
+            const last = new Feature(new Point(feature.getGeometry().getLastCoordinate()));
+            startPinSource.addFeature(first);
+            endPinSource.addFeature(last);
+            const gpxUrl  = feature.get("gpxUrl");
+            const folder = gpxUrl.substring(0, gpxUrl.lastIndexOf('/')+1);
+            trackContent[folder].features = [ feature, first, last];
           }
         });
       }
@@ -439,10 +452,102 @@ select.on('select', function (e) {
     const layer = select.getLayer(e.selected[0]);
     selectTrack(layer, e.selected[0]);
   } else {
-    document.getElementById("detail-container").classList.remove("show-detail-container");
-    document.getElementById("detail-container").classList.remove("expand-detail-container");
-    document.getElementById("images-button").classList.remove("active-button");
-    toggleImageViewer(true);
-    window.location.hash = "";
+    closeTrack();
   }
 });
+
+function closeTrack() {
+  select.getFeatures().clear();
+  document.getElementById("detail-container").classList.remove("show-detail-container");
+  document.getElementById("detail-container").classList.remove("expand-detail-container");
+  document.getElementById("images-button").classList.remove("active-button");
+  toggleImageViewer(true);
+  window.location.hash = "";
+}
+
+const savedFilter = false && (!window.location.hash ||
+  window.location.hash.indexOf(":t:") == -1) && localStorage.getItem('filter');
+
+var filter = savedFilter ? JSON.parse(savedFilter) : {
+  active: false,
+  done: false,
+  user: 2
+}
+
+function setVisible(control, value) {
+  document.getElementById(control).style.display = (value ? "block": "none");
+}
+
+function setActive(control, value) {
+  if(value) {
+    document.getElementById(control).classList.add("active");
+  } else {
+    document.getElementById(control).classList.remove("active");
+  }
+}
+
+function setIcon(control, value) {
+  const element = document.getElementById(control);
+  if(element.firstChild.localName == "i") {
+    element.firstChild.classList = "icon fa fa-"+value;
+  } else {
+    element.firstChild.innerHTML = value;
+  }
+}
+
+function filterSelected(content) {
+  const selection = ((filter.user + 1) ^ (!filter.done * 3));
+  console.log(filter, content.done);
+  return !(filter.active && content.done != selection);
+}
+
+function updateControls() {
+  if(filter.active) {
+    setVisible("status", true);
+    setActive("filter", true);
+    setIcon("status", filter.done ? "check" : "heart");
+    setVisible("user", true);
+    setIcon("user", ["👧", "👨", "👤"][filter.user])
+    setActive("user", filter.user < 2);
+  } else {
+    setActive("filter", false);
+    setVisible("status", false);
+    setVisible("user", false);
+  }
+
+  for (const [key, content] of Object.entries(trackContent)) {
+    content.features.forEach(feature => {
+      if(filterSelected(content)) {
+        feature.setStyle(null);
+      } else {
+        feature.setStyle(new Style());
+      }
+    })
+  };
+}
+
+updateControls();
+
+function controlClicked(control) {
+  closeTrack();
+  switch(control) {
+    case 'filter':
+      filter.active = !filter.active;
+      break;
+    case 'status':
+      filter.done = !filter.done;
+      break;
+    case 'user':
+      filter.user = (filter.user + 1) % 3;
+      break;
+  }
+  updateControls();
+  localStorage.setItem('filter', JSON.stringify(filter));
+}
+
+const controls = document.getElementsByClassName("control");
+const len = controls !== null ? controls.length : 0;
+for(var i=0; i < len; i++) {
+    const id = controls[i].id;
+    controls[i].addEventListener("click", () => controlClicked(id));
+}
