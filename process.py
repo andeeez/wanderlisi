@@ -19,14 +19,18 @@ while True:
         name = doc.getElementsByTagName("name")[0].firstChild.nodeValue
         stripped = name.replace('\u2013', '-')
         trackName = "".join( x for x in stripped if (x.isalnum() or x in ",_-() "))
+        new = False
         try:
             os.mkdir(basedir+"/"+trackName)
+            new = True
         except Exception as e:
             sys.stderr.write("Warning: "+str(e)+"\n")
         try:
             shutil.copyfile(filepath, basedir+"/"+trackName+"/"+trackName+".gpx")
-            shutil.copyfile(basedir+"/index.php", basedir+"/"+trackName+"/index.php")
             os.remove(filepath)
+            if not new:
+                shutil.copyfile(basedir+"/index.php", basedir+"/"+trackName+"/index.php")
+                shutil.copyfile(basedir+"/notes.md", basedir+"/"+trackName+"/notes.md")
         except Exception as e:
             sys.stderr.write(str(e)+"\n")
     time.sleep(10)
