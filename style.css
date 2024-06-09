@@ -146,6 +146,9 @@ h3 {
   padding-top: 6px;
   padding-left: 10px;
 }
+#track-name a {
+  text-decoration: none;
+}
 
 #toolbar {
   text-align: right;
