@@ -44,6 +44,11 @@ const map = new Map({
   view: view,
   controls: []
 });
+map.on('pointermove', function(e){
+  var pixel = map.getEventPixel(e.originalEvent);
+  var hit = map.hasFeatureAtPixel(pixel);
+  map.getViewport().style.cursor = hit ? 'pointer' : '';
+});
 
 const startPinSource = new VectorSource ();
 const endPinSource = new VectorSource ();
@@ -99,6 +104,9 @@ tracks.forEach(track => {
         trackContent[folder].done = (values[0] != "n") * 1 + (values[1] != "n") * 2;
       }
     });
+    fetch(folder+"/metadata.json", response => {
+      trackContent[folder].metadata = JSON.parse(response.responseText);
+    })
   });
   const layer = new VectorLayer({
     source: source,
@@ -319,7 +327,7 @@ function selectTrack(layer, feature) {
     const name = feature.get("name");
     selectedLayer = layer;
     document.getElementById("detail-container").classList.add("show-detail-container");
-    document.getElementById("track-name").innerText = name;
+    document.getElementById("track-name").firstChild.innerText = name;
     if(name != lastTrack) {
       document.getElementById("images").innerHTML = '';
     }
@@ -406,6 +414,9 @@ function selectTrack(layer, feature) {
     profile.update();
     window.location.hash = ":t:"+encodeURIComponent(name);
     var folder = gpxUrl.substring(0, gpxUrl.lastIndexOf('/')+1);
+    if(trackContent[folder].metadata && trackContent[folder].metadata.folder.indexOf("http") == 0) {
+      document.getElementById("track-name").firstChild.href = trackContent[folder].metadata.folder;
+    }
     if(trackContent[folder]) {
       document.getElementById("notes").innerHTML = trackContent[folder].notes;
     } else {
