@@ -177,11 +177,19 @@ h3 {
   display: none;
 }
 
+#track-data {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  top: 38px;
+}
+
 #profile-container {
   position: absolute;
   right: 0;
   left: 0;
-  top: 38px;
   height: 180px;
   padding-left: 6px;
   padding-right: 4px;
@@ -209,7 +217,7 @@ h3 {
   filter: grayscale(100%);
 }
 
-#edit {
+.sub-toolbar {
   position: absolute;
   top: 0;
   left: auto;
@@ -295,13 +303,15 @@ a:link, a:visited, a:hover, a:active {
 
 #info {
   position: absolute;
-  z-index: 10;
-  background-color: #ffffff90;
-  box-shadow: white 0 0 10px;
-  padding: 4px;
-  top: 48px;
+  padding: 6px;
   right: 10px;
   left: auto;
+}
+
+.white-mask {
+  z-index: 10;
+  background-color: #ffffffc0;
+  box-shadow: white 0 0 10px;
 }
 
 .info-line {
@@ -326,7 +336,7 @@ a:link, a:visited, a:hover, a:active {
     border-right: 0px;
   }
 
-  #trackName {
+  #track-name {
     font-size: 100%;
   }
 
