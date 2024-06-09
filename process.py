@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import glob, os, sys, shutil, time
+import glob, os, sys, shutil, time, json
 from xml.dom.minidom import parse
 import unicodedata
 
@@ -12,6 +12,7 @@ if len(sys.argv) <= 1:
     sys.exit(1)
 
 basedir = sys.argv[1]
+dropbox = sys.argv[2]
 
 while True:
     for filepath in glob.iglob(basedir + '/*.gpx'):
@@ -33,4 +34,13 @@ while True:
                 shutil.copyfile(basedir+"/notes.md", basedir+"/"+trackName+"/notes.md")
         except Exception as e:
             sys.stderr.write(str(e)+"\n")
+
+        metadata = { 
+            'folder' : os.popen(dropbox+ ' sharelink "'+ os.path.abspath(basedir+"/"+trackName)+'"').read(),
+            'notes' : os.popen(dropbox+ ' sharelink "'+ os.path.abspath(basedir+"/"+trackName+'/notes.md"')).read()
+        }
+
+        with open(basedir+"/"+trackName+'/metadata.json', 'w', encoding='utf-8') as f:
+            json.dump(metadata, f, ensure_ascii=False, indent=4)
+
     time.sleep(10)
