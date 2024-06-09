@@ -308,18 +308,23 @@ function fetch(url, callback) {
 }
 
 function toggleNotes(clear) {
-  if(document.getElementById("notes").style.display == "none" && !clear) {
-    document.getElementById("notes").style.display = "block";
+  if(document.getElementById("notes-container").style.display == "none" && !clear) {
+    document.getElementById("notes-container").style.display = "block";
     document.getElementById("track-data").style.display = "none";
     document.getElementById("notes-button").classList.add("active-button");
   } else {
-    document.getElementById("notes").style.display = "none";
+    document.getElementById("notes-container").style.display = "none";
     document.getElementById("track-data").style.display = "block";
     document.getElementById("notes-button").classList.remove("active-button");
   }
 }
 
+var editLink = "";
+
 document.getElementById("notes-button").addEventListener("click", () => toggleNotes());
+document.getElementById("edit-button").addEventListener("click", () => {
+  window.open(editLink);
+});
 
 function selectTrack(layer, feature) {
     toggleNotes(true);
@@ -416,12 +421,18 @@ function selectTrack(layer, feature) {
     var folder = gpxUrl.substring(0, gpxUrl.lastIndexOf('/')+1);
     if(trackContent[folder].metadata && trackContent[folder].metadata.folder.indexOf("http") == 0) {
       document.getElementById("track-name").firstChild.href = trackContent[folder].metadata.folder;
+      editLink = trackContent[folder].metadata.notes;
+    } else {
+      fetch(folder+"/metadata.json", response => {
+        const metadata = JSON.parse(response.responseText)
+        document.getElementById("track-name").firstChild.href = metadata.folder;
+        editLink = metadata.notes;
+      });
     }
-    if(trackContent[folder]) {
+    if(trackContent[folder].notes) {
       document.getElementById("notes").innerHTML = trackContent[folder].notes;
     } else {
       fetch(folder+"/notes.md", response => {
-        trackContent[folder] = trackContent[folder] || {};
         document.getElementById("notes").innerHTML = marked.parse(response.responseText);
       });
     }
@@ -508,7 +519,6 @@ function setIcon(control, value) {
 
 function filterSelected(content) {
   const selection = ((filter.user + 1) ^ (!filter.done * 3));
-  console.log(filter, content.done);
   return !(filter.active && content.done != selection);
 }
 

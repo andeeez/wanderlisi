@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <title>wanderlisi</title>
     <link href="https://cdn.skypack.dev/ol/ol.css" rel="stylesheet">
-    <link href="./style.css?a" rel="stylesheet">
+    <link href="./style.css?b" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
@@ -33,7 +33,11 @@
             </div>
             <div id="profile-container"><canvas width="320" height="160" id="profile"></canvas></div>
           </div>
-          <div id="notes"></div>
+          <div id="notes-container">
+            <div id="notes">
+            </div>
+            <div id="edit"><i id="edit-button" class="button fa fa-pencil"></i></div>
+          </div>
           <div id="image-viewer" class="image-viewer-normal">
             <div id="images-container">
               <div class="filler"></div>
@@ -48,6 +52,6 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-    <script type="module" src="./main.js?a"></script>
+    <script type="module" src="./main.js?b"></script>
   </body>
 </html>
