@@ -500,7 +500,7 @@ function selectTrack(layer, feature) {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = Math.round(totalMinutes % 60);
     document.getElementById("time").innerText = hours + " h " + String(minutes).padStart(2, '0');
-    document.getElementById("distance").innerText = (Math.round(current.distance / 100.0) / 10).toLocaleString('de-CH');
+    document.getElementById("distance").innerText = (Math.round(current.distance / 100.0) / 10).toLocaleString('de-CH').replace(".", ",");
     document.getElementById("up").innerText = Math.round(current.up).toLocaleString('de-CH');
     document.getElementById("down").innerText = Math.round(current.down).toLocaleString('de-CH');
     const gpxUrl = feature.get("gpxUrl");
