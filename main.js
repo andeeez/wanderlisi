@@ -31,8 +31,6 @@ const view = new View({
     zoom: 8.5,
   });
 
-view.on("change", e => console.log(e.target.getZoom()))
-
 const map = new Map({
   target: 'map',
   layers: [
@@ -456,13 +454,15 @@ function selectTrack(layer, feature) {
     }
     lastTrack = name;
     var lines = feature.getGeometry().getCoordinates();
+    const start = toLonLat(feature.getGeometry().getFirstCoordinate())
     var current = {
       distance: 0,
       up: 0,
       down: 0,
       time: 0,
-      coordinate: toLonLat(feature.getGeometry().getFirstCoordinate())
+      coordinate: start
     }
+    document.getElementById("maps").href="https://www.google.com/maps/dir/?api=1&destination="+start[1]+","+start[0];
     var highest = 0;
     var lowest = 9999;
     var previous = Object.assign({}, current);

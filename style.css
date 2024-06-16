@@ -175,6 +175,7 @@ h3 {
   opacity: 0.4;
   padding-left: 2px;
   padding-right: 6px;
+  padding-bottom: 10px;;
   cursor: pointer;
 }
 
@@ -233,7 +234,7 @@ h3 {
   top: 0;
   left: auto;
   right: 6px;
-  text-align: right;
+  text-align: center;
   width: 24px;
   padding-top: 6px;
 }
