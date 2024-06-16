@@ -68,7 +68,7 @@ const map = new Map({
     new TileLayer({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
-      minZoom: 12.5,
+      minZoom: 12.6,
       source: new XYZ({
         minZoom: 14,
         maxZoom: 16,
@@ -78,7 +78,7 @@ const map = new Map({
     new TileLayer({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
-      minZoom: 13.5,
+      minZoom: 13.6,
       source: new XYZ({
         minZoom: 15,
         maxZoom: 17,
@@ -88,7 +88,7 @@ const map = new Map({
     new TileLayer({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
-      minZoom: 14.5,
+      minZoom: 14.6,
       source: new XYZ({
         minZoom: 16,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
