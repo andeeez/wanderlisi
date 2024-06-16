@@ -58,7 +58,7 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 11.5,
-      maxZoom: 15,
+      maxZoom: 16,
       source: new XYZ({
         zDirection: -1,
         minZoom: 13,
@@ -69,7 +69,6 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 12.5,
-      maxZoom: 16,
       source: new XYZ({
         minZoom: 14,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
@@ -79,7 +78,6 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 13.5,
-      maxZoom: 17,
       source: new XYZ({
         minZoom: 15,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
