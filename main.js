@@ -246,7 +246,7 @@ tracks.forEach(track => {
             processedLayers.push(layer);
             if(feature.get("name") == selectedTrack) {
               selectTrack(layer, feature);
-              view.fit(feature.getGeometry(), { maxZoom: 11.5 });
+              view.fit(feature.getGeometry(), { maxZoom: 12 });
               select.getFeatures().push(feature);
             }
             const first = new Feature(new Point(feature.getGeometry().getFirstCoordinate()));
