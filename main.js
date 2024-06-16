@@ -18,6 +18,9 @@ import tracks from './tracks/' with { type: 'json' };
 const params = window.location.hash.match(/:t:([^:]*)/)
 const selectedTrack = params!=null && params.length > 1 ? decodeURIComponent(params[1]) : null;
 
+document.addEventListener('touchmove', event => event.scale !== 1 && event.preventDefault(), { passive: false });
+
+
 // Map Config
 
 const view = new View({
