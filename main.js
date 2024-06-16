@@ -6,6 +6,8 @@ import TileLayer from 'https://cdn.skypack.dev/ol/layer/Tile.js';
 import VectorLayer from 'https://cdn.skypack.dev/ol/layer/Vector.js';
 import VectorSource from 'https://cdn.skypack.dev/ol/source/Vector.js';
 import XYZ from 'https://cdn.skypack.dev/ol/source/XYZ.js';
+import TileWMS from 'https://cdn.skypack.dev/ol/source/TileWMS.js';
+import TileGrid from "https://cdn.skypack.dev/ol/tilegrid/TileGrid";
 import {fromLonLat, toLonLat} from 'https://cdn.skypack.dev/ol/proj.js';
 import {getDistance} from 'https://cdn.skypack.dev/ol/sphere.js';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'https://cdn.skypack.dev/ol/style.js';
@@ -102,11 +104,64 @@ const map = new Map({
         minZoom: 18,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
       })
-    })
+    }),
   ],
   view: view,
   controls: []
 });
+
+export const WMS_TILE_SIZE = 512; // px
+export const TILEGRID_ORIGIN = [2420000, 1350000]; // in EPSG:2056
+// resolutions in meter/pixel
+export const TILEGRID_RESOLUTIONS = [
+  4000,
+  3750,
+  3500,
+  3250,
+  3000,
+  2750,
+  2500,
+  2250,
+  2000,
+  1750,
+  1500,
+  1250,
+  1000,
+  750,
+  650,
+  500,
+  250,
+  100,
+  50,
+  20,
+  10,
+  5,
+  2.5,
+  2,
+  1.5,
+  1,
+  0.5,
+  0.25,
+  0.1
+];
+
+const layerId = "ch.astra.wanderland-sperrungen_umleitungen";
+const tiledWmsLayer = new TileLayer({
+  opacity: 0.8,
+  minZoom: 11.5,
+  source: new TileWMS({
+    url: `https://wms0.geo.admin.ch/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=${layerId}&LANG=en`,
+    gutter: 120,
+    tileGrid: new TileGrid({
+      projection: "EPSG:2056",
+      tileSize: WMS_TILE_SIZE,
+      origin: TILEGRID_ORIGIN,
+      resolutions: TILEGRID_RESOLUTIONS
+    })
+  })
+});
+map.addLayer(tiledWmsLayer);
+
 map.on('pointermove', function(e){
   var pixel = map.getEventPixel(e.originalEvent);
   var hit = map.hasFeatureAtPixel(pixel);
