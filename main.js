@@ -18,9 +18,6 @@ import tracks from './tracks/' with { type: 'json' };
 const params = window.location.hash.match(/:t:([^:]*)/)
 const selectedTrack = params!=null && params.length > 1 ? decodeURIComponent(params[1]) : null;
 
-document.addEventListener('touchmove', event => event.scale !== 1 && event.preventDefault(), { passive: false });
-
-
 // Map Config
 
 const view = new View({
@@ -40,7 +37,6 @@ const map = new Map({
     new TileLayer({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
-      maxZoom: 12,
       source: new XYZ({
         zDirection: -1,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
@@ -50,7 +46,6 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 10.2,
-      maxZoom: 13,
       source: new XYZ({
         zDirection: -1,
         minZoom: 12,
@@ -61,7 +56,6 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 11.2,
-      maxZoom: 14,
       source: new XYZ({
         zDirection: -1,
         minZoom: 13,
@@ -72,7 +66,6 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 12.4,
-      maxZoom: 15,
       source: new XYZ({
         minZoom: 14,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
@@ -82,7 +75,6 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 13.4,
-      maxZoom: 16,
       source: new XYZ({
         minZoom: 15,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
@@ -92,7 +84,6 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 14.4,
-      maxZoom: 17,
       source: new XYZ({
         minZoom: 16,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
