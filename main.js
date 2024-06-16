@@ -219,7 +219,7 @@ tracks.forEach(track => {
       if(values.length >= 2) {
         trackContent[folder].done = (values[0] != "n") * 1 + (values[1] != "n") * 2;
       }
-    });
+    }, true);
     fetch(folder+"/metadata.json", response => {
       trackContent[folder].metadata = JSON.parse(response.responseText);
     })
@@ -412,7 +412,7 @@ document.getElementById("images-button").addEventListener("click", () => {
   updateImageView();
 });
 
-function fetch(url, callback) {
+function fetch(url, callback, noCache) {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
@@ -420,6 +420,9 @@ function fetch(url, callback) {
           }
       };
       xmlhttp.open("GET", url, true);
+      if(noCache) {
+        xmlhttp.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+      }
       xmlhttp.send();
 }
 
@@ -552,7 +555,7 @@ function selectTrack(layer, feature) {
     } else {
       fetch(folder+"/notes.md", response => {
         document.getElementById("notes").innerHTML = marked.parse(response.responseText);
-      });
+      }, true);
     }
 
     if(lastTrack != name || document.getElementById("images").innerHTML=='') {
