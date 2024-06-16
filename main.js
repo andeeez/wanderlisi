@@ -363,7 +363,7 @@ const profile = new Chart(
 
 const selectStyle = new Style({
   stroke: new Stroke({
-    color: '#ff44ffe0',
+    color: '#ff44ffc0',
     width: 8
   })
 })
