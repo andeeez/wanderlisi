@@ -397,14 +397,9 @@ function toggleImageViewer(clear) {
     document.getElementById("image-viewer").classList.remove("image-viewer-normal");
     document.getElementById("image-viewer").classList.add("image-viewer-big");
   } else {
-    document.getElementById("image-viewer").classList.add("image-viewer-normal");
     document.getElementById("image-viewer").classList.remove("image-viewer-big");
+    document.getElementById("image-viewer").classList.add("image-viewer-normal");
   }
-    const images = document.getElementsByClassName("image");
-    const len = images !== null ? images.length : 0;
-    for(var i=0; i < len; i++) {
-        images[i].style.height = "100%";
-    }
 }
 
 document.getElementById("images-button").addEventListener("click", () => {
