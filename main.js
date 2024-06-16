@@ -29,15 +29,79 @@ const view = new View({
     zoom: 8.5,
   });
 
+view.on("change", e => console.log(e.target.getZoom()))
+
 const map = new Map({
   target: 'map',
   layers: [
     new TileLayer({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
+      maxZoom: 12,
       source: new XYZ({
         zDirection: -1,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
+      })
+    }),
+    new TileLayer({
+      extent: [640000, 5660000, 1200000, 6190000],
+      preload: 1,
+      minZoom: 10.2,
+      maxZoom: 13,
+      source: new XYZ({
+        zDirection: -1,
+        minZoom: 12,
+        url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
+      })
+    }),
+    new TileLayer({
+      extent: [640000, 5660000, 1200000, 6190000],
+      preload: 1,
+      minZoom: 11.2,
+      maxZoom: 14,
+      source: new XYZ({
+        zDirection: -1,
+        minZoom: 13,
+        url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
+      })
+    }),
+    new TileLayer({
+      extent: [640000, 5660000, 1200000, 6190000],
+      preload: 1,
+      minZoom: 12.4,
+      maxZoom: 15,
+      source: new XYZ({
+        minZoom: 14,
+        url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
+      })
+    }),
+    new TileLayer({
+      extent: [640000, 5660000, 1200000, 6190000],
+      preload: 1,
+      minZoom: 13.4,
+      maxZoom: 16,
+      source: new XYZ({
+        minZoom: 15,
+        url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
+      })
+    }),
+    new TileLayer({
+      extent: [640000, 5660000, 1200000, 6190000],
+      preload: 1,
+      minZoom: 14.4,
+      maxZoom: 17,
+      source: new XYZ({
+        minZoom: 16,
+        url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
+      })
+    }),
+    new TileLayer({
+      extent: [640000, 5660000, 1200000, 6190000],
+      preload: 1,
+      minZoom: 15.8,
+      source: new XYZ({
+        minZoom: 18,
+        url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
       })
     })
   ],
@@ -112,7 +176,7 @@ tracks.forEach(track => {
     source: source,
     style: new Style({
       stroke: new Stroke({
-        color: '#bb11bbc0',
+        color: '#bb11bba0',
         width: 8
       })
     }),
