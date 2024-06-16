@@ -37,8 +37,8 @@ const map = new Map({
     new TileLayer({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
-      maxZoom: 13,
       source: new XYZ({
+        maxZoom: 13,
         zDirection: -1,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
       })
@@ -47,10 +47,10 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 10.5,
-      maxZoom: 14,
       source: new XYZ({
         zDirection: -1,
         minZoom: 12,
+        maxZoom: 14,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg`
       })
     }),
@@ -58,10 +58,10 @@ const map = new Map({
       extent: [640000, 5660000, 1200000, 6190000],
       preload: 1,
       minZoom: 11.5,
-      maxZoom: 16,
       source: new XYZ({
         zDirection: -1,
         minZoom: 13,
+        maxZoom: 15,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
       })
     }),
@@ -71,6 +71,7 @@ const map = new Map({
       minZoom: 12.5,
       source: new XYZ({
         minZoom: 14,
+        maxZoom: 16,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
       })
     }),
@@ -80,6 +81,7 @@ const map = new Map({
       minZoom: 13.5,
       source: new XYZ({
         minZoom: 15,
+        maxZoom: 17,
         url: `https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg`
       })
     }),
