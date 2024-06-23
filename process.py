@@ -11,36 +11,36 @@ if len(sys.argv) <= 1:
     sys.stderr.write("Usage: process.py <basedir>\n")
     sys.exit(1)
 
-basedir = sys.argv[1]
+tracksDir = sys.argv[1]+"/tracks"
 dropbox = sys.argv[2]
 
 while True:
-    for filepath in glob.iglob(basedir + '/*.gpx'):
+    for filepath in glob.iglob(tracksDir + '/*.gpx'):
         doc = parse(filepath)
         name = doc.getElementsByTagName("name")[0].firstChild.nodeValue
         stripped = name.replace('\u2013', '-')
         trackName = "".join( x for x in stripped if (x.isalnum() or x in ",_-() "))
         new = False
         try:
-            os.mkdir(basedir+"/"+trackName)
+            os.mkdir(tracksDir+"/"+trackName)
             new = True
         except Exception as e:
             sys.stderr.write("Warning: "+str(e)+"\n")
         try:
-            shutil.copyfile(filepath, basedir+"/"+trackName+"/"+trackName+".gpx")
+            shutil.copyfile(filepath, tracksDir+"/"+trackName+"/"+trackName+".gpx")
             os.remove(filepath)
             if new:
-                shutil.copyfile(basedir+"/index.php", basedir+"/"+trackName+"/index.php")
-                shutil.copyfile(basedir+"/notes.md", basedir+"/"+trackName+"/notes.md")
+                shutil.copyfile(tracksDir+"/index.php", tracksDir+"/"+trackName+"/index.php")
+                shutil.copyfile(tracksDir+"/notes.md", tracksDir+"/"+trackName+"/notes.md")
         except Exception as e:
             sys.stderr.write(str(e)+"\n")
 
-        metadata = { 
-            'folder' : os.popen(dropbox+ ' sharelink "'+ os.path.abspath(basedir+"/"+trackName)+'"').read(),
-            'notes' : os.popen(dropbox+ ' sharelink "'+ os.path.abspath(basedir+"/"+trackName+'/notes.md"')).read()
+        metadata = {
+            'folder' : os.popen(dropbox+ ' sharelink "'+ os.path.abspath(tracksDir+"/"+trackName)+'"').read(),
+            'notes' : os.popen(dropbox+ ' sharelink "'+ os.path.abspath(tracksDir+"/"+trackName+'/notes.md"')).read()
         }
 
-        with open(basedir+"/"+trackName+'/metadata.json', 'w', encoding='utf-8') as f:
+        with open(tracksDir+"/"+trackName+'/metadata.json', 'w', encoding='utf-8') as f:
             json.dump(metadata, f, ensure_ascii=False, indent=4)
 
     time.sleep(10)

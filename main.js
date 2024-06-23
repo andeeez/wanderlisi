@@ -15,7 +15,7 @@ import Select from 'https://cdn.skypack.dev/ol/interaction/Select.js';
 import {click} from 'https://cdn.skypack.dev/ol/events/condition.js';
 
 import GPX from 'https://cdn.skypack.dev/ol/format/GPX.js';
-import tracks from './tracks/' with { type: 'json' };
+import tracks from './data/tracks/' with { type: 'json' };
 
 const params = window.location.hash.match(/:t:([^:]*)/)
 const selectedTrack = params!=null && params.length > 1 ? decodeURIComponent(params[1]) : null;
@@ -199,7 +199,7 @@ tracks.forEach(track => {
     return;
   }
   const source = new VectorSource({
-      url: 'tracks/'+(/^.*\....$/.test(track) ? track : track+"/"+track+".gpx"),
+      url: 'data/tracks/'+(/^.*\....$/.test(track) ? track : track+"/"+track+".gpx"),
       format: format,
   });
   source.on("addfeature", e => {
