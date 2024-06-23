@@ -11,11 +11,12 @@ if len(sys.argv) <= 1:
     sys.stderr.write("Usage: process.py <basedir>\n")
     sys.exit(1)
 
-tracksDir = sys.argv[1]+"/tracks"
+basedir = sys.argv[1]
+tracksDir = basedir + "/tracks"
 dropbox = sys.argv[2]
 
 while True:
-    for filepath in glob.iglob(tracksDir + '/*.gpx'):
+    for filepath in glob.iglob(basedir + '/*.gpx'):
         doc = parse(filepath)
         name = doc.getElementsByTagName("name")[0].firstChild.nodeValue
         stripped = name.replace('\u2013', '-')
