@@ -51,6 +51,46 @@ h3 {
   display: none;
 }
 
+#menu-button {
+  left: 12px;
+  top: 12px;
+  padding-top: 6px;
+  padding-bottom: 2px;
+}
+
+#menu {
+  position: absolute;
+  padding: 12px;
+  top: 64px;
+  width: 340px;
+  min-height: 340px;
+  max-height: 70%;
+  left: -374px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  background-color: white;
+  border-top: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  transition: all .3s ease-out;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: 0px 0px 6px #00000050;
+}
+
+.menu-open {
+  left: 0 !important;
+}
+
+#plan-container {
+  display: none;
+}
+
+#close-button {
+  display: none;
+}
+
 .control {
   position: absolute;
   right: 12px;
@@ -145,21 +185,25 @@ h3 {
   rotate: 45deg;
 }
 
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 110%;
+  font-weight: bold;
+}
+
 #track-name {
   position: absolute;
   left: 0;
   right: 0;
   margin-right: 72px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   height: 20px;
-  font-size: 110%;
-  font-weight: bold;
   padding-top: 6px;
   padding-left: 10px;
 }
-#track-name a {
+
+.title a {
   text-decoration: none;
 }
 
