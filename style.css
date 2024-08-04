@@ -52,6 +52,7 @@ h3 {
 }
 
 #menu-button {
+  display: none;
   left: 12px;
   top: 12px;
   padding-top: 6px;
@@ -83,12 +84,48 @@ h3 {
   left: 0 !important;
 }
 
+.menu-item {
+  padding-top: 6px;
+  cursor: pointer;
+}
+
 #plan-container {
-  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  left: 100%;
+  background-color: white;
+}
+
+.plan-container-sliding {
+  transition: all 0.3s ease-out;
+}
+
+.plan-container-open {
+  left: 0 !important;
+  border-left: 1px solid #ccc;
+  box-shadow: 0px 0px 6px #00000050;
+}
+
+#plan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 #close-button {
-  display: none;
+  position: absolute;
+  cursor: pointer;
+  font-size: 24px;
+  top: 12px;
+  right: 12px;
 }
 
 .control {
@@ -118,6 +155,10 @@ h3 {
 
 .control.active > span, .control.active > i {
   opacity: 1;
+}
+
+.hidden {
+  display: none !important;
 }
 
 .active {

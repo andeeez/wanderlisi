@@ -13,13 +13,11 @@
   <body>
     <div id="main-container">
       <div id="map"></div>
+      <div id="filter" class="filter-control control hidden"><i class="icon fa fa-filter"></i></div>
+      <div id="status" class="filter-control control active hidden"><i class="icon fa fa-heart"></i></div>
+      <div id="user" class="filter-control control hidden"><span class="icon">👧</span></div>
       <div id="menu-button" class="control"><i class="fa fa-bars"></i></div>
       <div id="menu"></div>
-      <div id="plan-container"></div>
-      <div id="close-button"><i class="button fa fa-close"></i></div>
-      <div id="filter" class="control"><i class="icon fa fa-filter"></i></div>
-      <div id="status" class="control active"><i class="icon fa fa-heart"></i></div>
-      <div id="user" class="control"><span class="icon">👧</span></div>
       <div id="detail-container" class="hide-detail-container">
         <div id="detail">
           <div id="track-name" class="title"><a target="_blank" href="#">&nbsp;</a></div>
@@ -57,6 +55,10 @@
             <div id="right-gradient"></div>
           </div>
         </div>
+      </div>
+      <div id="plan-container">
+        <div id="plan"></div>
+        <div id="close-button"><i class="button fa fa-close"></i></div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
