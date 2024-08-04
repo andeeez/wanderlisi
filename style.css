@@ -314,8 +314,11 @@ h3 {
   scrollbar-width: none;
   padding-left: 12px;
   padding-right: 12px;
-  filter: grayscale(100%);
   user-select: text;
+}
+
+.text li {
+  filter: grayscale(70%);
 }
 
 .sub-toolbar {
