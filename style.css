@@ -64,6 +64,7 @@ h3 {
   padding: 12px;
   top: 64px;
   width: 340px;
+  max-width: 80%;
   min-height: 340px;
   max-height: 70%;
   left: -374px;
@@ -434,6 +435,20 @@ a:link, a:visited, a:hover, a:active {
   font-weight: bold;
 }
 
+#plan ul {
+  list-style-type: none;
+  padding-inline-start: 10px;
+}
+
+.start-time {
+  display: inline-block;
+  width: 36pt;
+}
+
+.duration, .start-time {
+  color: gray;
+}
+
 @media only screen and (max-width: 767px) {
 
   #detail-container {
@@ -475,19 +490,5 @@ a:link, a:visited, a:hover, a:active {
   #info {
     font-size: 14px;
     width: 70px;
-  }
-
-  #plan ul {
-    list-style-type: none;
-    padding-inline-start: 10px;
-  }
-
-  .start-time {
-    display: inline-block;
-    width: 36pt;
-  }
-
-  .duration, .start-time {
-    color: gray;
   }
 }
