@@ -1,0 +1,21 @@
+{
+  "name": "wanderlisi",
+  "short_name": "wanderlisi",
+  "description": "The little Wander Lisi helps us to keep track of our past and next hikes",
+  "start_url": "/wanderlisi/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#cc11cc",
+  "icons": [
+    {
+      "src": "img/android-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/android-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
