@@ -477,4 +477,17 @@ a:link, a:visited, a:hover, a:active {
     width: 70px;
   }
 
+  #plan ul {
+    list-style-type: none;
+    padding-inline-start: 10px;
+  }
+
+  .start-time {
+    display: inline-block;
+    width: 36pt;
+  }
+
+  .duration, .start-time {
+    color: gray;
+  }
 }
