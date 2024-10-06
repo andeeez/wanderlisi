@@ -440,6 +440,22 @@ a:link, a:visited, a:hover, a:active {
   padding-inline-start: 10px;
 }
 
+#plan ul li {
+  margin-bottom: 4px;
+}
+
+#plan span {
+  color: gray;
+}
+
+#plan .loaded {
+  color: black;
+}
+
+#plan a {
+  text-decoration: none;
+}
+
 .start-time {
   display: inline-block;
   width: 36pt;
