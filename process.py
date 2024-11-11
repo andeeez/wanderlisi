@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import glob, os, sys, shutil, time, json
+import glob, os, sys, shutil, time, json, subprocess
 from xml.dom.minidom import parse
 import unicodedata
 
@@ -14,6 +14,31 @@ if len(sys.argv) <= 1:
 basedir = sys.argv[1]
 tracksDir = basedir + "/tracks"
 dropbox = sys.argv[2]
+
+# Define the maximum width or height
+max_dimension = 1000
+
+def resize_image(image_path):
+    subprocess.run([
+        "convert", image_path, "-resize", f"{max_dimension}x{max_dimension}>", image_path
+    ])
+
+def process_images_in_folder(folder_path):
+    for root, _, files in os.walk(folder_path):
+        for file in files:
+            if file.lower().endswith(".jpg") or file.lower().endswith(".jpeg"):
+                image_path = os.path.join(root, file)
+
+                try:
+                    dimensions = subprocess.check_output([
+                        "identify", "-format", "%wx%h", image_path
+                    ])
+                    width, height = map(int, dimensions.split(b'x'))
+
+                    if width > max_dimension or height > max_dimension:
+                        resize_image(image_path)
+                except subprocess.CalledProcessError as e:
+                    sys.stderr.write(f"Error processing {image_path}: {e}")
 
 while True:
     for filepath in glob.iglob(basedir + '/*.gpx'):
@@ -36,6 +61,8 @@ while True:
         except Exception as e:
             sys.stderr.write(str(e)+"\n")
 
+        time.sleep(3)
+
         metadata = {
             'folder' : os.popen(dropbox+ ' sharelink "'+ os.path.abspath(tracksDir+"/"+trackName)+'"').read(),
             'notes' : os.popen(dropbox+ ' sharelink "'+ os.path.abspath(tracksDir+"/"+trackName+'/notes.md"')).read()
@@ -43,5 +70,7 @@ while True:
 
         with open(tracksDir+"/"+trackName+'/metadata.json', 'w', encoding='utf-8') as f:
             json.dump(metadata, f, ensure_ascii=False, indent=4)
+
+    process_images_in_folder(tracksDir)
 
     time.sleep(10)
