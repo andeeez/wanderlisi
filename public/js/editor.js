@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadNoteFiles() {
     fileSelect.disabled = true;
     try {
-      const res = await fetch('/note-files');
+      const res = await fetch('note-files');
       if (res.ok) {
         const { files } = await res.json();
         
@@ -54,12 +54,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function load() {
-    const res = await fetch(`/file-content?id=${currentFileId}`);
+    const res = await fetch(`file-content?id=${currentFileId}`);
     if (res.ok) {
       const data = await res.json();
       editor.value = data.content || '';
     } else if (res.status === 401) {
-      window.location.href = '/login.html';
+      window.location.href = 'login.html';
     } else {
       editor.value = '';
       msg.textContent = 'Failed to load file';
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   save.addEventListener('click', async () => {
     msg.textContent = 'Saving...';
     const content = editor.value;
-    const res = await fetch('/save', { 
+    const res = await fetch('save', { 
       method: 'POST', 
       headers: { 'Content-Type': 'application/json' }, 
       body: JSON.stringify({ content, fileId: currentFileId }) 
@@ -79,14 +79,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       msg.textContent = 'Saved';
       setTimeout(() => { msg.textContent = ''; }, 2000);
     } else if (res.status === 401) {
-      window.location.href = '/login.html';
+      window.location.href = 'login.html';
     } else {
       msg.style.color = '#a00';
       msg.textContent = 'Save failed';
     }
   });
 
-  logout.addEventListener('click', () => { window.location.href = '/logout'; });
+  logout.addEventListener('click', () => { window.location.href = 'logout'; });
   
   fileSelect.addEventListener('change', (e) => {
     currentFileId = e.target.value;
