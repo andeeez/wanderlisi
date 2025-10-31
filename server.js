@@ -58,7 +58,7 @@ async function ensureNote(notePath) {
 // Simple login - hardcoded credentials for local usage
 app.post('/login', (req, res) => {
   const { username, password } = req.body || {};
-  if (username === 'admin' && password === 'password') {
+  if (username === 'admin' && password === process.env.ADMIN_PASSWORD) {
     req.session.authenticated = true;
     res.json({ ok: true });
   } else {
