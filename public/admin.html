@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Editor - Wanderlisi</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin:16px }
+      header { display:flex; align-items:center; justify-content:space-between }
+      textarea { width:100%; height:70vh; font-family: monospace; font-size:14px; margin-top:10px }
+      .controls { margin-top:8px }
+      button { padding:8px 12px }
+      .status { margin-left:12px; color:#080 }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <h2>Track Notes Editor</h2>
+        <select id="file-select" style="padding:6px;font-size:14px;min-width:300px">
+          <option value="">Loading tracks...</option>
+        </select>
+        <button id="refresh" style="padding:6px" title="Refresh track list">↻</button>
+      </div>
+      <div>
+        <button id="logout">Logout</button>
+      </div>
+    </header>
+
+    <div>
+      <textarea id="editor" placeholder="Loading..."></textarea>
+      <div class="controls">
+        <button id="save">Save</button>
+        <span id="msg"></span>
+      </div>
+    </div>
+
+    <script src="/js/editor.js"></script>
+  </body>
+</html>
